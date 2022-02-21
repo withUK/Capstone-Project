@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Project_Flow_Manager</RootNamespace>
+    <ApplicationInsightsResourceId>/subscriptions/1d990ab9-6bba-49ca-84cd-f8931b4ff0f5/resourceGroups/CapstoneProject/providers/microsoft.insights/components/Capstone-ProjectFlowManager-Dev</ApplicationInsightsResourceId>
+    <UserSecretsId>1dc55c2d-6ba2-4990-b96b-d57b5500699a</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
+  </ItemGroup>
+
+</Project>
