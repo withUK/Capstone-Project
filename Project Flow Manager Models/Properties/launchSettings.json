@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Project_Flow_Manager_Models": {
+    "ProjectFlowManagerModels": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

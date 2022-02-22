@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Flow Manager", "Project Flow Manager\Project Flow Manager.csproj", "{41C99B09-27E9-4509-AC75-A928E1ECCC36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectFlowManager", "Project Flow Manager\ProjectFlowManager.csproj", "{41C99B09-27E9-4509-AC75-A928E1ECCC36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Flow Manager Administration", "Project Flow Manager Administration\Project Flow Manager Administration.csproj", "{9C47EC2B-BDB1-482E-8A4C-16938CAC9FFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectFlowManagerAdministration", "Project Flow Manager Administration\ProjectFlowManagerAdministration.csproj", "{9C47EC2B-BDB1-482E-8A4C-16938CAC9FFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Flow Manager Models", "Project Flow Manager Models\Project Flow Manager Models.csproj", "{3B1AC1C8-2673-4B6C-9AA3-5165AB50DEDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectFlowManagerModels", "Project Flow Manager Models\ProjectFlowManagerModels.csproj", "{3B1AC1C8-2673-4B6C-9AA3-5165AB50DEDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

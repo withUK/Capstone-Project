@@ -1,4 +1,4 @@
-namespace Project_Flow_Manager.Models
+namespace ProjectFlowManager.Models
 {
     public class ErrorViewModel
     {
