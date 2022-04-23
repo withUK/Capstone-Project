@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\img\lcc-logo-white-01.svg" />
+  </ItemGroup>
+
 </Project>

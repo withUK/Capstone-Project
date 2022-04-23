@@ -15,6 +15,7 @@ namespace ProjectFlowManager.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Title"] = "Home";
             return View();
         }
 
