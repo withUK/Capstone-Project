@@ -1,13 +1,10 @@
 ﻿@model Project_Flow_Manager_Models.Technology
 
-@{
-    ViewData["Title"] = "Create";
-}
+<a asp-action="Index" asp-controller="Technologies" class="link-back">Back</a>
 
-<h1>Create</h1>
+<h1>Technologies</h1>
+<h2>@ViewData["Title"]</h2>
 
-<h4>Technology</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -22,10 +19,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

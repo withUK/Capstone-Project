@@ -47,6 +47,7 @@ namespace Project_Flow_Manager_Administration.Controllers
         // GET: Technologies/Create
         public IActionResult Create()
         {
+            ViewData["Title"] = "Add a new option";
             return View();
         }
 
@@ -79,6 +80,7 @@ namespace Project_Flow_Manager_Administration.Controllers
             {
                 return NotFound();
             }
+            ViewData["Title"] = "Edit option";
             return View(technology);
         }
 
@@ -132,6 +134,7 @@ namespace Project_Flow_Manager_Administration.Controllers
                 return NotFound();
             }
 
+            ViewData["Title"] = "Confirm Deletion";
             return View(technology);
         }
 
