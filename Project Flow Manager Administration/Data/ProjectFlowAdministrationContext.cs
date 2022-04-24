@@ -16,4 +16,6 @@ using Project_Flow_Manager_Models;
         public DbSet<Project_Flow_Manager_Models.Technology> Technology { get; set; }
 
         public DbSet<Project_Flow_Manager_Models.Status> Status { get; set; }
+
+        public DbSet<Project_Flow_Manager_Models.ProcessType> ProcessType { get; set; }
     }
