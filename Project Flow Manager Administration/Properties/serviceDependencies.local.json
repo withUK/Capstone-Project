@@ -8,6 +8,10 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/microsoft.insights/components/Capstone-ProjectFlowManager-Dev",
       "type": "appInsights.azure",
       "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
+    },
+    "mssql1": {
+      "type": "mssql.local",
+      "connectionId": "ConnectionStrings:ProjectFlowAdministrationContext"
     }
   }
 }

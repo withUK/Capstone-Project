@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<ProjectFlowAdministrationContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ProjectFlowAdministrationContext") ?? throw new InvalidOperationException("Connection string 'ProjectFlowAdministrationContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

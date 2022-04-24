@@ -17,4 +17,8 @@
     <None Include="wwwroot\img\lcc-logo-white-01.svg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Project Flow Manager Models\ProjectFlowManagerModels.csproj" />
+  </ItemGroup>
+
 </Project>
