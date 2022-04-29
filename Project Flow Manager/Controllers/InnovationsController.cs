@@ -8,25 +8,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager_Models;
 
-namespace Project_Flow_Manager_Administration.Controllers
+namespace Project_Flow_Manager.Controllers
 {
-    public class StatusController : Controller
+    public class InnovationsController : Controller
     {
-        private readonly ProjectFlowAdministrationContext _context;
+        private readonly InnovationManagerContext _context;
+        private readonly ProjectFlowAdministrationContext _adminContext;
 
-        public StatusController(ProjectFlowAdministrationContext context)
+        public InnovationsController(InnovationManagerContext context, ProjectFlowAdministrationContext adminContext)
         {
             _context = context;
+            _adminContext = adminContext;
         }
 
-        // GET: Status
+        // GET: Innovations
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Statuses";
-            return View(await _context.Status.ToListAsync());
+            ViewData["Title"] = "Innovation Submissions";
+            return View(await _context.Innovation.ToListAsync());
         }
 
-        // GET: Status/Details/5
+        // GET: Innovations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,41 +36,46 @@ namespace Project_Flow_Manager_Administration.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Status
+            var innovation = await _context.Innovation
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (status == null)
+            if (innovation == null)
             {
                 return NotFound();
             }
 
-            return View(status);
+            return View(innovation);
         }
 
-        // GET: Status/Create
+        // GET: Innovations/Create
         public IActionResult Create()
         {
-            ViewData["Title"] = "Add an new option";
+            ViewData["Title"] = "Add a new idea";
+            ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
             return View();
         }
 
-        // POST: Status/Create
+        // POST: Innovations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Value")] Status status)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
         {
+            innovation.SubmittedDate = DateTime.Now;
+            innovation.SubmittedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+
             if (ModelState.IsValid)
             {
-                _context.Add(status);
+                _context.Add(innovation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Title"] = "Add an new option";
-            return View(status);
+            ViewData["Title"] = "Add a new idea";
+            ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
+            return View(innovation);
         }
 
-        // GET: Status/Edit/5
+        // GET: Innovations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +83,25 @@ namespace Project_Flow_Manager_Administration.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Status.FindAsync(id);
-            if (status == null)
+            var innovation = await _context.Innovation.FindAsync(id);
+            if (innovation == null)
             {
                 return NotFound();
             }
-            ViewData["Title"] = "Edit option";
-            return View(status);
+
+            ViewData["Title"] = "Edit an idea";
+            ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
+            return View(innovation);
         }
 
-        // POST: Status/Edit/5
+        // POST: Innovations/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Value")] Status status)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,SubmittedDate,SubmittedBy,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
         {
-            if (id != status.Id)
+            if (id != innovation.Id)
             {
                 return NotFound();
             }
@@ -101,12 +110,12 @@ namespace Project_Flow_Manager_Administration.Controllers
             {
                 try
                 {
-                    _context.Update(status);
+                    _context.Update(innovation);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StatusExists(status.Id))
+                    if (!InnovationExists(innovation.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +126,14 @@ namespace Project_Flow_Manager_Administration.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Title"] = "Edit option";
-            return View(status);
+
+            ViewData["Title"] = "Edit an idea";
+            ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
+            
+            return View(innovation);
         }
 
-        // GET: Status/Delete/5
+        // GET: Innovations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,31 +141,31 @@ namespace Project_Flow_Manager_Administration.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Status
+            var innovation = await _context.Innovation
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (status == null)
+            if (innovation == null)
             {
                 return NotFound();
             }
 
             ViewData["Title"] = "Confirm Deletion";
-            return View(status);
+            return View(innovation);
         }
 
-        // POST: Status/Delete/5
+        // POST: Innovations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var status = await _context.Status.FindAsync(id);
-            _context.Status.Remove(status);
+            var innovation = await _context.Innovation.FindAsync(id);
+            _context.Innovation.Remove(innovation);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StatusExists(int id)
+        private bool InnovationExists(int id)
         {
-            return _context.Status.Any(e => e.Id == id);
+            return _context.Innovation.Any(e => e.Id == id);
         }
     }
 }

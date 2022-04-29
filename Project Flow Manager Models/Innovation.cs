@@ -13,12 +13,10 @@ namespace Project_Flow_Manager_Models
         public string Description { get; set; }
 
         [Display(Name = "Submitted Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime SubmittedDate { get; set; }
 
         [Display(Name = "Submitted By")]
-        public string SubmittedBy { get; set; }
+        public string? SubmittedBy { get; set; }
 
         [Display(Name = "Process Duration")]
         public int ProcessDuration { get; set; }
@@ -26,7 +24,7 @@ namespace Project_Flow_Manager_Models
         [Display(Name = "Number Of People Included")]
         public int NumberOfPeopleIncluded { get; set; }
 
-        [Display(Name = "Proces Type")]
+        [Display(Name = "Process Type")]
         public string ProcessType { get; set; }
 
         public string Status { get; set; }
@@ -37,10 +35,10 @@ namespace Project_Flow_Manager_Models
         public DateTime RequiredDate { get; set; }
 
         [Display(Name = "Process Steps")]
-        public virtual ICollection<ProcessStep> ProcessSteps { get; set; }
-        public virtual ICollection<Technology> Technologies { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<ProcessStep>? ProcessSteps { get; set; }
+        public virtual ICollection<Technology>? Technologies { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
+        public virtual ICollection<Tag>? Tags { get; set; }
 
     }
 }
