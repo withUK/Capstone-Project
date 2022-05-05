@@ -40,5 +40,7 @@ namespace Project_Flow_Manager_Models
         public virtual ICollection<Comment>? Comments { get; set; }
         public virtual ICollection<Tag>? Tags { get; set; }
 
+        public int? ApprovalId { get; set; }
+        public virtual Approval? Approval { get; set; }
     }
 }

@@ -21,14 +21,12 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
-        // GET: Innovations
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Innovation Submissions";
             return View(await _context.Innovation.ToListAsync());
         }
 
-        // GET: Innovations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,36 +44,33 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
-        // GET: Innovations/Create
         public IActionResult Create()
         {
             ViewData["Title"] = "Add a new idea";
-            ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
+            ViewBag.StatusOptions = _adminContext.Status.Any() ? _adminContext.Status.Select(s => s.Value).ToList() : new List<string>();
+            ViewBag.ProcessTypes = _adminContext.ProcessType.Any() ? _adminContext.ProcessType.Select(s => s.Value).ToList() : new List<string>();
             return View();
         }
 
-        // POST: Innovations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
         {
             innovation.SubmittedDate = DateTime.Now;
             innovation.SubmittedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+            innovation.ProcessSteps = new List<ProcessStep>();
 
             if (ModelState.IsValid)
             {
                 _context.Add(innovation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ProcessSteps), new { innovationId = innovation.Id });
             }
             ViewData["Title"] = "Add a new idea";
             ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
-            return View(innovation);
+            return View(innovation.Id);
         }
 
-        // GET: Innovations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -94,9 +89,6 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
-        // POST: Innovations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,SubmittedDate,SubmittedBy,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
@@ -133,7 +125,6 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
-        // GET: Innovations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,8 +132,8 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var innovation = await _context.Innovation
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var innovation = _context.Innovation.Where(i => i.Id == id).Include(i => i.ProcessSteps).FirstOrDefault();
+
             if (innovation == null)
             {
                 return NotFound();
@@ -152,15 +143,117 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
-        // POST: Innovations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var innovation = await _context.Innovation.FindAsync(id);
+            var innovation = _context.Innovation.Where(i => i.Id == id).Include(i => i.ProcessSteps).FirstOrDefault();
             _context.Innovation.Remove(innovation);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ProcessSteps(int innovationId)
+        {
+            var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
+            
+            if (innovation == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = string.Concat("Process Steps for ", innovation.Title);
+
+            return View(innovation);
+        }
+
+        public async Task<IActionResult> AddProcessStep(int innovationId)
+        {
+            var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
+            
+            if (innovation == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = string.Concat("Process Step for ", innovation.Title);
+            ViewData["InnovationId"] = innovation.Id;
+
+            ProcessStep step = new ProcessStep();
+
+            if (innovation.ProcessSteps == null)
+            {
+                step.OrderPosition = 1;
+            }
+            else
+            {
+                step.OrderPosition = innovation.ProcessSteps.Count() + 1;
+            }
+
+            return View(step);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddProcessStep([Bind("Value,OrderPosition")] ProcessStep processStep, int innovationId)
+        {
+            var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
+            
+            if (innovation == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (innovation.ProcessSteps == null)
+                {
+                    innovation.ProcessSteps = new List<ProcessStep>();
+                }
+
+                innovation.ProcessSteps.Add(processStep);
+                _context.Innovation.Update(innovation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ProcessSteps), new { innovationId = innovation.Id });
+            }
+
+            ViewData["Title"] = string.Concat("Process Step for ", new { innovationId = innovation.Title });
+            return View(innovation.Id);
+        }
+
+        public async Task<IActionResult> DeleteProcessStep(int? id, int innovationId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var processStep = await _context.ProcessStep.FirstOrDefaultAsync(m => m.Id == id);
+            
+            if (processStep == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Confirm Deletion";
+            ViewData["InnovationId"] = innovationId;
+            return View(processStep);
+        }
+
+        [HttpPost, ActionName("DeleteProcessStep")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProcessStepConfirmed(int id, int innovationId)
+        {
+            var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
+            ViewData["Title"] = string.Concat("Process Steps for ", innovation.Title);
+
+            var processStep = await _context.ProcessStep.FirstOrDefaultAsync(m => m.Id == id);
+            _context.ProcessStep.Remove(processStep);
+            await _context.SaveChangesAsync();
+            ViewData["ActionMessage"] = "Process step has been removed";
+            ViewData["ActionResult"] = "success";
+
+            return RedirectToAction(nameof(ProcessSteps), new { innovationId = innovationId });
         }
 
         private bool InnovationExists(int id)
