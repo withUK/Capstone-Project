@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Project_Flow_Manager.Migrations
 {
     [DbContext(typeof(InnovationManagerContext))]
-    partial class InnovationManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220502202000_UpdateInnovationModel_AddApproval")]
+    partial class UpdateInnovationModel_AddApproval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace Project_Flow_Manager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ApprovalId")
+                    b.Property<int>("ApprovalId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -200,7 +202,9 @@ namespace Project_Flow_Manager.Migrations
                 {
                     b.HasOne("ProjectFlowManagerModels.Approval", "Approval")
                         .WithMany()
-                        .HasForeignKey("ApprovalId");
+                        .HasForeignKey("ApprovalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Approval");
                 });

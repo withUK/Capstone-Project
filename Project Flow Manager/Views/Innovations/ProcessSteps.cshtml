@@ -1,0 +1,42 @@
+﻿@model Project_Flow_Manager_Models.Innovation
+
+<a asp-action="Index" asp-controller="Innovations" class="link-back">Back</a>
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a class="btn btn-primary btn-arrow" asp-action="AddProcessStep" asp-route-innovationId=@Model.Id>Add a step</a>
+</p>
+
+@if(Model.ProcessSteps != null && Model.ProcessSteps.Count() > 0)
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-md-1"></th>
+                    <th>
+                        Instruction
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.ProcessSteps) {
+                <tr>
+                    <td class="col-md-1">
+                        @Html.DisplayFor(modelItem => item.OrderPosition)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="DeleteProcessStep" asp-route-id="@item.Id" asp-route-innovationId="@Model.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

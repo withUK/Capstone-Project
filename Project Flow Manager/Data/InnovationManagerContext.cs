@@ -10,4 +10,6 @@ public class InnovationManagerContext : DbContext
         }
 
     public DbSet<Innovation> Innovation { get; set; }
+
+    public DbSet<ProcessStep> ProcessStep { get; set; }
 }

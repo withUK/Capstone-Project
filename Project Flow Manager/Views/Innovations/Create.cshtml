@@ -1,6 +1,6 @@
 ﻿@model Project_Flow_Manager_Models.Innovation
 
-<a asp-action="Index" asp-controller="Technologies" class="link-back">Back</a>
+<a asp-action="Index" asp-controller="Innovations" class="link-back">Back</a>
 
 <h1>Innovation Submission</h1>
 <h2>@ViewData["Title"]</h2>
@@ -31,7 +31,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProcessType" class="control-label"></label>
-                <input asp-for="ProcessType" class="form-control" />
+                <select asp-for="ProcessType" class="form-control">
+                @if(ViewBag.ProcessTypes != null)
+                {
+                    @foreach(var item in ViewBag.ProcessTypes)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                }
+                </select>
                 <span asp-validation-for="ProcessType" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -50,7 +58,7 @@
                 <span asp-validation-for="RequiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Next" class="btn btn-primary" />
             </div>
         </form>
     </div>
