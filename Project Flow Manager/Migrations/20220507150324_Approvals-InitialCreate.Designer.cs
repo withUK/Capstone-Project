@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Project_Flow_Manager.Migrations
 {
     [DbContext(typeof(InnovationManagerContext))]
-    partial class InnovationManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220507150324_Approvals-InitialCreate")]
+    partial class ApprovalsInitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,9 +160,6 @@ namespace Project_Flow_Manager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectAssessmentReportId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -171,45 +170,7 @@ namespace Project_Flow_Manager.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectAssessmentReportId");
-
                     b.ToTable("Approval");
-                });
-
-            modelBuilder.Entity("ProjectFlowManagerModels.Attachment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Filename")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Filepath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Filesize")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProjectAssessmentReportId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectAssessmentReportId");
-
-                    b.ToTable("Attachment");
                 });
 
             modelBuilder.Entity("ProjectFlowManagerModels.Comment", b =>
@@ -226,9 +187,6 @@ namespace Project_Flow_Manager.Migrations
                     b.Property<int?>("InnovationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProjectAssessmentReportId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -237,30 +195,7 @@ namespace Project_Flow_Manager.Migrations
 
                     b.HasIndex("InnovationId");
 
-                    b.HasIndex("ProjectAssessmentReportId");
-
                     b.ToTable("Comment");
-                });
-
-            modelBuilder.Entity("ProjectFlowManagerModels.ProjectAssessmentReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("InnovationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InnovationId");
-
-                    b.ToTable("ProjectAssessmentReport");
                 });
 
             modelBuilder.Entity("Project_Flow_Manager_Models.Innovation", b =>
@@ -293,40 +228,11 @@ namespace Project_Flow_Manager.Migrations
                         .HasForeignKey("InnovationId");
                 });
 
-            modelBuilder.Entity("ProjectFlowManagerModels.Approval", b =>
-                {
-                    b.HasOne("ProjectFlowManagerModels.ProjectAssessmentReport", null)
-                        .WithMany("Approvals")
-                        .HasForeignKey("ProjectAssessmentReportId");
-                });
-
-            modelBuilder.Entity("ProjectFlowManagerModels.Attachment", b =>
-                {
-                    b.HasOne("ProjectFlowManagerModels.ProjectAssessmentReport", null)
-                        .WithMany("Attachments")
-                        .HasForeignKey("ProjectAssessmentReportId");
-                });
-
             modelBuilder.Entity("ProjectFlowManagerModels.Comment", b =>
                 {
                     b.HasOne("Project_Flow_Manager_Models.Innovation", null)
                         .WithMany("Comments")
                         .HasForeignKey("InnovationId");
-
-                    b.HasOne("ProjectFlowManagerModels.ProjectAssessmentReport", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ProjectAssessmentReportId");
-                });
-
-            modelBuilder.Entity("ProjectFlowManagerModels.ProjectAssessmentReport", b =>
-                {
-                    b.HasOne("Project_Flow_Manager_Models.Innovation", "Innovation")
-                        .WithMany()
-                        .HasForeignKey("InnovationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Innovation");
                 });
 
             modelBuilder.Entity("Project_Flow_Manager_Models.Innovation", b =>
@@ -338,15 +244,6 @@ namespace Project_Flow_Manager.Migrations
                     b.Navigation("Tags");
 
                     b.Navigation("Technologies");
-                });
-
-            modelBuilder.Entity("ProjectFlowManagerModels.ProjectAssessmentReport", b =>
-                {
-                    b.Navigation("Approvals");
-
-                    b.Navigation("Attachments");
-
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

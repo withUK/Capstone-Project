@@ -1,0 +1,27 @@
+﻿@model ProjectFlowManagerModels.Approval
+
+<a asp-action="Index" asp-controller="InnovationApprovals" class="link-back">Back</a>
+
+<h1>Innovation Approvals</h1>
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Decline">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Reason" class="control-label"></label>
+                <textarea asp-for="Reason" rows="5" class="form-control-textarea"></textarea>
+                <span asp-validation-for="Reason" class="text-danger"></span>
+            </div>
+            <input hidden value=@ViewData["InnovationId"] id="innovationId" name="InnovationId" />
+            <div class="form-group">
+                <input type="submit" value="Confirm" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

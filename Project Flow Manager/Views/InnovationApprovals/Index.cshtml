@@ -4,10 +4,6 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p>
-    <a class="btn btn-primary btn-arrow" asp-action="Create">Create new</a>
-</p>
-
 @if(Model != null && Model.Count() > 0)
 {
     <div class="table-responsive">
@@ -24,16 +20,16 @@
                         @Html.DisplayNameFor(model => model.SubmittedBy)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.RequiredDate)
+                        @Html.DisplayNameFor(model => model.Status)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Status)
+                        @Html.DisplayNameFor(model => model.RequiredDate)
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model) {
+        @foreach (var item in Model) {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)
@@ -45,20 +41,16 @@
                         @Html.DisplayFor(modelItem => item.SubmittedBy)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.RequiredDate)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
                     <td>
-                    @if(!string.Equals(item.Status,"Approved"))
-                    {
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
+                        @Html.DisplayFor(modelItem => item.RequiredDate)
+                    </td>
+                    <td>
+                        <a asp-action="Review" asp-route-id="@item.Id">Review</a>
                     </td>
                 </tr>
-            }
+        }
             </tbody>
         </table>
     </div>
