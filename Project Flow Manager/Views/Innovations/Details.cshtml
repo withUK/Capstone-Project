@@ -1,5 +1,7 @@
 ﻿@model Project_Flow_Manager_Models.Innovation
 
+<a asp-action="Index" asp-controller="Innovations" class="link-back">Back</a>
+
 <h1>Innovation Submission</h1>
 <h2>@ViewData["Title"]</h2>
 
@@ -42,18 +44,26 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.RequiredDate)
         </dd>
-        @if(Model.ProcessSteps != null)
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProcessSteps)
+        </dt>
+        <dd class="col-sm-10">
+                <a asp-action="AddProcessStep" asp-route-innovationId="@Model.Id"><i class="fa-solid fa-plus"></i></a>
+        </dd>
+        @if(Model.ProcessSteps.Count() > 0)
         {
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.ProcessSteps)
-            </dt>
             @foreach(var item in Model.ProcessSteps)
             {
                 <div class="row">
                     <dd class = "col-sm-2"></dd>
-                    <dd class = "col-sm-10">
+                    <dd class = "col-sm-3">
                         @string.Concat(item.OrderPosition,". ",item.Value)
                     </dd>
+                    <dd class = "col-sm-2">
+                        <a asp-action="EditProcessStep" asp-route-id="@item.Id" asp-route-innovationId="@Model.Id"><i class="fa-solid fa-pen-to-square"></i></a>|
+                        <a asp-action="DeleteProcessStep" asp-route-id="@item.Id" asp-route-innovationId="@Model.Id"><i class="fa-solid fa-trash-can"></i></a>
+                    </dd>
+                    <dd class = "col-sm-5"></dd>
                 </div>
             }
         }
@@ -78,6 +88,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary btn-arrow" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
 </div>

@@ -93,7 +93,7 @@ namespace Project_Flow_Manager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,SubmittedDate,SubmittedBy,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
         {
             if (id != innovation.Id)
             {
@@ -220,6 +220,51 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = string.Concat("Process Step for ", new { innovationId = innovation.Title });
+            return View(innovation.Id);
+        }
+
+        public async Task<IActionResult> EditProcessStep(int id, int innovationId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var step = await _context.ProcessStep.FindAsync(id);
+            if (step == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Edit a preocess step";
+            ViewData["InnovationId"] = innovationId;
+            return View(step);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProcessStep([Bind("Value,OrderPosition")] ProcessStep processStep, int innovationId)
+        {
+            var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
+
+            if (innovation == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                //if (innovation.ProcessSteps == null)
+                //{
+                //    innovation.ProcessSteps = new List<ProcessStep>();
+                //}
+
+                _context.Innovation.Update(innovation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = innovation.Id });
+            }
+
+            ViewData["Title"] = "Edit a preocess step";
             return View(innovation.Id);
         }
 
