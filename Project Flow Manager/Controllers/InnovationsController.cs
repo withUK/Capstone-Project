@@ -35,12 +35,14 @@ namespace Project_Flow_Manager.Controllers
             }
 
             var innovation = await _context.Innovation
+                .Include(m => m.ProcessSteps)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (innovation == null)
             {
                 return NotFound();
             }
 
+            ViewData["Title"] = string.Concat("Details of ", innovation.Title);
             return View(innovation);
         }
 
