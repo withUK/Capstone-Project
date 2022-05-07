@@ -31,7 +31,7 @@ namespace Project_Flow_Manager_Models
 
         [Display(Name = "Required Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime RequiredDate { get; set; }
 
         [Display(Name = "Process Steps")]
