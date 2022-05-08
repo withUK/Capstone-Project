@@ -5,6 +5,11 @@ namespace Project_Flow_Manager_Models
 {
     public class Innovation
     {
+        public Innovation()
+        {
+            Status = "New";
+        }
+
         public int Id { get; set; }
 
         [Required]
