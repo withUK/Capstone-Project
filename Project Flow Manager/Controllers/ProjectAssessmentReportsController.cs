@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
@@ -34,6 +35,7 @@ namespace Project_Flow_Manager.Controllers
             }
 
             var projectAssessmentReport = await _context.ProjectAssessmentReport
+                .Include(p => p.Recommendations)
                 .Include(p => p.Innovation)
                 .Include(i => i.Innovation.ProcessSteps)
                 .Include(i => i.Innovation.Approval)
@@ -153,6 +155,34 @@ namespace Project_Flow_Manager.Controllers
             _context.ProjectAssessmentReport.Remove(projectAssessmentReport);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult AddRecommendation(int projectAssessmentReportId)
+        {
+            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).FirstOrDefault();
+
+            if (projectAssessmentReport == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = string.Concat("New recomendation for ", projectAssessmentReport.Title);
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReport.Id;
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddRecommendation([Bind("Id,Details,CreatedBy,CreatedDate")] Recommendation recommendation, int projectAssessmentReportId)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(recommendation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(recommendation);
         }
 
         private bool ProjectAssessmentReportExists(int id)

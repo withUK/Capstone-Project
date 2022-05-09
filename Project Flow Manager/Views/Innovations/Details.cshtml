@@ -48,7 +48,7 @@
             @Html.DisplayNameFor(model => model.ProcessSteps)
         </dt>
         <dd class="col-sm-10">
-                <a asp-action="AddProcessStep" asp-route-innovationId="@Model.Id"><i class="fa-solid fa-plus"></i></a>
+            <a asp-action="AddProcessStep" asp-route-innovationId="@Model.Id"><i class="fa-solid fa-plus"></i></a>
         </dd>
         @if(Model.ProcessSteps.Count() > 0)
         {

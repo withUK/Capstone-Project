@@ -1,0 +1,31 @@
+﻿@model Project_Flow_Manager_Models.Recommendation
+
+@{
+    var assessmentId = @ViewData["ProjectAssessmentReportId"];
+}
+
+<a asp-action="Details" asp-controller="ProjectAssessmentReports" asp-route-assessmentId="@assessmentId" class="link-back">Back</a>
+
+<h1>Assessments</h1>
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="AddRecommendation">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Details" class="control-label"></label>
+                <textarea asp-for="Details" rows="10" class="form-control-textarea"></textarea>
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            <input type="hidden" id="projectAssessmentReportId" name="projectAssessmentReportId" value=@assessmentId />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

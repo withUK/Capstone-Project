@@ -17,4 +17,6 @@ public class InnovationManagerContext : DbContext
     public DbSet<ProjectFlowManagerModels.Approval> Approval { get; set; }
 
     public DbSet<ProjectFlowManagerModels.ProjectAssessmentReport> ProjectAssessmentReport { get; set; }
+
+    public DbSet<Project_Flow_Manager_Models.Recommendation> Recommendation { get; set; }
 }
