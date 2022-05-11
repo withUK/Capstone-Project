@@ -64,6 +64,7 @@ namespace Project_Flow_Manager.Controllers
             }
             ViewData["Title"] = "Add a new idea";
             ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
+            ViewBag.ProcessTypes = _adminContext.ProcessType.Any() ? _adminContext.ProcessType.Select(s => s.Value).ToList() : new List<string>();
             return View(innovation.Id);
         }
 
@@ -239,27 +240,15 @@ namespace Project_Flow_Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProcessStep([Bind("Value,OrderPosition")] ProcessStep processStep, int innovationId)
         {
-            var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
-
-            if (innovation == null)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                //if (innovation.ProcessSteps == null)
-                //{
-                //    innovation.ProcessSteps = new List<ProcessStep>();
-                //}
-
-                _context.Innovation.Update(innovation);
+                _context.ProcessStep.Update(processStep);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Details), new { id = innovation.Id });
+                return RedirectToAction(nameof(Details), new { id = innovationId });
             }
 
             ViewData["Title"] = "Edit a preocess step";
-            return View(innovation.Id);
+            return View(innovationId);
         }
 
         public async Task<IActionResult> DeleteProcessStep(int? id, int innovationId)

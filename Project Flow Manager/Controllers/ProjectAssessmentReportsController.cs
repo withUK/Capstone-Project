@@ -37,8 +37,8 @@ namespace Project_Flow_Manager.Controllers
             var projectAssessmentReport = await _context.ProjectAssessmentReport
                 .Include(p => p.Recommendations)
                 .Include(p => p.Innovation)
-                .Include(i => i.Innovation.ProcessSteps)
-                .Include(i => i.Innovation.Approval)
+                .Include(p => p.Innovation.ProcessSteps)
+                .Include(p => p.Innovation.Approval)
                 .FirstOrDefaultAsync(m => m.Id == id);
             
             if (projectAssessmentReport == null)
@@ -166,23 +166,113 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
+            Recommendation recommendation = new Recommendation { Effort = new Effort() };
+
             ViewData["Title"] = string.Concat("New recomendation for ", projectAssessmentReport.Title);
             ViewData["ProjectAssessmentReportId"] = projectAssessmentReport.Id;
+            ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
 
-            return View();
+            return View(recommendation);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddRecommendation([Bind("Id,Details,CreatedBy,CreatedDate")] Recommendation recommendation, int projectAssessmentReportId)
+        public async Task<IActionResult> AddRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
+        {
+            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).Include(i => i.Recommendations).FirstOrDefault();
+
+            if (projectAssessmentReport == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                recommendation.Effort = effort;
+                recommendation.CreatedDate = DateTime.Now;
+                recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+
+                projectAssessmentReport.Recommendations.Add(recommendation);
+                _context.ProjectAssessmentReport.Update(projectAssessmentReport);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = projectAssessmentReport.Id });
+            }
+
+            ViewData["Title"] = string.Concat("New recomendation for ", projectAssessmentReport.Title);
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReport.Id;
+            ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
+
+            return View(recommendation);
+        }
+
+        public async Task<IActionResult> EditRecommendation(int id, int projectAssessmentReportId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recommendation = await _context.Recommendation.FindAsync(id);
+            if (recommendation == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Edit a recommendation";
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReportId;
+            return View(recommendation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(recommendation);
+                _context.Recommendation.Update(recommendation);
+                _context.Effort.Update(effort);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = projectAssessmentReportId });
             }
+
+            ViewData["Title"] = "Edit a recommendation";
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReportId;
+            return View(projectAssessmentReportId);
+        }
+
+        public async Task<IActionResult> DeleteRecommendation(int? id, int projectAssessmentReportId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recommendation = await _context.Recommendation.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (recommendation == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Confirm Deletion";
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReportId;
             return View(recommendation);
+        }
+
+        [HttpPost, ActionName("DeleteRecommendation")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteRecommendationConfirmed(int id, int projectAssessmentReportId)
+        {
+            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).Include(i => i.Recommendations).FirstOrDefault();
+            ViewData["Title"] = string.Concat("Recommendation for ", projectAssessmentReport.Title);
+
+            var recommendation = await _context.Recommendation.FirstOrDefaultAsync(m => m.Id == id);
+            _context.Recommendation.Remove(recommendation);
+            await _context.SaveChangesAsync();
+            ViewData["ActionMessage"] = "Recommendation has been removed";
+            ViewData["ActionResult"] = "success";
+
+            return RedirectToAction(nameof(Details), new { id = projectAssessmentReportId });
         }
 
         private bool ProjectAssessmentReportExists(int id)

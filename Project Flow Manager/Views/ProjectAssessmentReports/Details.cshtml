@@ -22,6 +22,10 @@
         </dd>
     </dl>
 
+    <div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    </div>
+
     <h3>@Html.DisplayNameFor(model => model.Recommendations)</h3>
     <a asp-action="AddRecommendation" asp-controller="ProjectAssessmentReports" asp-route-projectAssessmentReportId="@Model.Id" class="btn btn-primary">Add a recomendation</a>
     @if(Model.Recommendations != null || Model.Recommendations.Count() > 0)
@@ -29,11 +33,8 @@
         @foreach(var item in Model.Recommendations)
         {
             <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayName(item.Details)
-                </dt>
                 <dd class = "col-sm-10">
-                    @Html.Display(item.Details)
+                    <a asp-action="Details" asp-controller="Recommendations" asp-route-id="@item.Id">@item.CreatedDate by @item.CreatedBy</a>
                 </dd>
             </dl>
         }
@@ -46,7 +47,4 @@
         </dt>
     </dl>
 
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
 </div>

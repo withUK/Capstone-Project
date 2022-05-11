@@ -14,9 +14,11 @@ public class InnovationManagerContext : DbContext
 
     public DbSet<ProcessStep> ProcessStep { get; set; }
 
-    public DbSet<ProjectFlowManagerModels.Approval> Approval { get; set; }
+    public DbSet<Approval> Approval { get; set; }
 
-    public DbSet<ProjectFlowManagerModels.ProjectAssessmentReport> ProjectAssessmentReport { get; set; }
+    public DbSet<ProjectAssessmentReport> ProjectAssessmentReport { get; set; }
 
-    public DbSet<Project_Flow_Manager_Models.Recommendation> Recommendation { get; set; }
+    public DbSet<Recommendation> Recommendation { get; set; }
+
+    public DbSet<Project_Flow_Manager_Models.Effort>? Effort { get; set; }
 }

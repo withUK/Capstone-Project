@@ -9,7 +9,8 @@ namespace Project_Flow_Manager_Models
         
         public string Details { get; set; }
 
-        public Effort Effort { get; set; }
+        public int? EffortId { get; set; }
+        public virtual Effort? Effort { get; set; }
 
         [Display(Name = "Created By")]
         public string? CreatedBy { get; set; }
@@ -19,8 +20,8 @@ namespace Project_Flow_Manager_Models
 
         [Display(Name = "Process Steps")]
         public virtual ICollection<ProcessStep>? ProcessSteps { get; set; }
-        public virtual ICollection<Attachment> Attachments { get; set; }
-        public virtual ICollection<Technology> Technologies { get; set; }
-        public virtual ICollection<Team> Teams { get; set; }
+        public virtual ICollection<Attachment>? Attachments { get; set; }
+        public virtual ICollection<Technology>? Technologies { get; set; }
+        public virtual ICollection<Team>? Teams { get; set; }
     }
 }
