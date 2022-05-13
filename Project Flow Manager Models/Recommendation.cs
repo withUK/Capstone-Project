@@ -23,5 +23,9 @@ namespace Project_Flow_Manager_Models
         public virtual ICollection<Attachment>? Attachments { get; set; }
         public virtual ICollection<Technology>? Technologies { get; set; }
         public virtual ICollection<Team>? Teams { get; set; }
+
+        [Display(Name = "Project Assessment Reports")]
+        public int? ProjectAssessmentReportId { get; set; }
+        public virtual ProjectAssessmentReport? ProjectAssessmentReport { get; set; }
     }
 }

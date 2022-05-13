@@ -1,15 +1,12 @@
 ﻿@model ProjectFlowManagerModels.ProjectAssessmentReport
 
-@{
-    ViewData["Title"] = "Delete";
-}
+<a asp-action="Index" asp-controller="ProjectAssessmentReports" class="link-back">Back</a>
 
-<h1>Delete</h1>
+<h1>Assessments</h1>
+<h2>@ViewData["Title"]</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>ProjectAssessmentReport</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)

@@ -129,7 +129,9 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var innovation = _context.Innovation.Where(i => i.Id == id).Include(i => i.ProcessSteps).FirstOrDefault();
+            var innovation = _context.Innovation
+                .Where(i => i.Id == id)
+                .Include(i => i.ProcessSteps).FirstOrDefault();
 
             if (innovation == null)
             {

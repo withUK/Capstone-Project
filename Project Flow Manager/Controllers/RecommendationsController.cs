@@ -22,7 +22,12 @@ namespace Project_Flow_Manager.Controllers
         // GET: Recommendations
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Recommendation.ToListAsync());
+            ViewData["Title"] = "Recommendations";
+            ViewData["AssessmentCount"] = _context.ProjectAssessmentReport.Count();
+            return View(await _context.Recommendation
+                .Include(r => r.Effort)
+                .Include(r => r.ProjectAssessmentReport)
+                .ToListAsync());
         }
 
         // GET: Recommendations/Details/5
@@ -34,18 +39,22 @@ namespace Project_Flow_Manager.Controllers
             }
 
             var recommendation = await _context.Recommendation
+                .Include(_r => _r.Effort)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (recommendation == null)
             {
                 return NotFound();
             }
 
+            ViewData["Title"] = string.Concat("Details of recommendation : ", recommendation.Id);
             return View(recommendation);
         }
 
         // GET: Recommendations/Create
         public IActionResult Create()
         {
+            ViewData["Title"] = "Add a new recommendation";
+            ViewData["AssessmentId"] = new SelectList(_context.ProjectAssessmentReport, "Id", String.Concat("Id", " ", "Title"));
             return View();
         }
 
@@ -62,11 +71,14 @@ namespace Project_Flow_Manager.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
+            ViewData["Title"] = "Add a new recommendation";
+            ViewData["AssessmentId"] = new SelectList(_context.ProjectAssessmentReport, "Id", "Title");
             return View(recommendation);
         }
 
         // GET: Recommendations/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int projectAssessmentReportId)
         {
             if (id == null)
             {
@@ -78,6 +90,9 @@ namespace Project_Flow_Manager.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["Title"] = "Edit a recommendation";
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReportId;
             return View(recommendation);
         }
 
@@ -113,6 +128,9 @@ namespace Project_Flow_Manager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewData["Title"] = "Edit a recommendation";
+
             return View(recommendation);
         }
 
@@ -131,6 +149,7 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
+            ViewData["Title"] = "Confirm Deletion";
             return View(recommendation);
         }
 

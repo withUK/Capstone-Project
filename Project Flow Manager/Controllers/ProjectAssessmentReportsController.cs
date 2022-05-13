@@ -22,8 +22,8 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Assessments";
-            var innovationManagerContext = _context.ProjectAssessmentReport.Include(p => p.Innovation);
-            return View(await innovationManagerContext.ToListAsync());
+            ViewData["InnovationCount"] = _context.Innovation.Count();
+            return View(await _context.ProjectAssessmentReport.Include(i => i.Innovation).ToListAsync());
         }
 
         // GET: ProjectAssessmentReports/Details/5
@@ -36,6 +36,7 @@ namespace Project_Flow_Manager.Controllers
 
             var projectAssessmentReport = await _context.ProjectAssessmentReport
                 .Include(p => p.Recommendations)
+                .ThenInclude(r => r.Effort)
                 .Include(p => p.Innovation)
                 .Include(p => p.Innovation.ProcessSteps)
                 .Include(p => p.Innovation.Approval)
@@ -202,6 +203,25 @@ namespace Project_Flow_Manager.Controllers
             ViewData["ProjectAssessmentReportId"] = projectAssessmentReport.Id;
             ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
 
+            return View(recommendation);
+        }
+
+        public async Task<IActionResult> RecommendationDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recommendation = await _context.Recommendation
+                .Include(_r => _r.Effort)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (recommendation == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = string.Concat("Details of recommendation : ", recommendation.Id);
             return View(recommendation);
         }
 

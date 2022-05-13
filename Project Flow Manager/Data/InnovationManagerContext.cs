@@ -20,5 +20,5 @@ public class InnovationManagerContext : DbContext
 
     public DbSet<Recommendation> Recommendation { get; set; }
 
-    public DbSet<Project_Flow_Manager_Models.Effort>? Effort { get; set; }
+    public DbSet<Effort>? Effort { get; set; }
 }
