@@ -1,0 +1,71 @@
+﻿@model ProjectFlowManagerModels.ProjectAssessmentReport
+
+<a asp-action="Index" asp-controller="ProjectAssessmentReports" class="link-back">Back</a>
+
+<h1>Assessments</h1>
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+    </dl>
+
+    <div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+    </div>
+
+    <h3>@Html.DisplayNameFor(model => model.Recommendations)</h3>
+    <a asp-action="AddRecommendation" asp-controller="ProjectAssessmentReports" asp-route-projectAssessmentReportId="@Model.Id" class="btn btn-primary">Add a recomendation</a>
+    @if(Model.Recommendations != null || Model.Recommendations.Count() > 0)
+    {
+        @foreach(var item in Model.Recommendations)
+        {
+            <dl class="row">
+                <dd class = "col-sm-10">
+                    <a asp-action="RecommendationDetails" asp-controller="ProjectAssessmentReports" asp-route-id="@item.Id">@item.CreatedDate by @item.CreatedBy</a>
+                </dd>
+            </dl>
+        }
+    }
+
+    <h3>@Html.DisplayNameFor(model => model.Innovation)</h3>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Innovation.Title)
+        </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Innovation.Description)
+        </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Innovation.NumberOfPeopleIncluded)
+        </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.NumberOfPeopleIncluded)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Innovation.ProcessDuration)
+        </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.ProcessDuration)
+        </dd>
+    </dl>
+
+</div>

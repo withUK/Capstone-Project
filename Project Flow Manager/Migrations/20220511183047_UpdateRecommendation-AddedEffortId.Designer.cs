@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,13 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Project_Flow_Manager.Migrations
 {
     [DbContext(typeof(InnovationManagerContext))]
-    partial class InnovationManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220511183047_UpdateRecommendation-AddedEffortId")]
+    partial class UpdateRecommendationAddedEffortId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -29,10 +31,11 @@ namespace Project_Flow_Manager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("Amount")
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
                     b.Property<string>("Measure")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -137,7 +140,7 @@ namespace Project_Flow_Manager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EffortId")
+                    b.Property<int>("EffortId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProjectAssessmentReportId")
@@ -376,15 +379,15 @@ namespace Project_Flow_Manager.Migrations
                 {
                     b.HasOne("Project_Flow_Manager_Models.Effort", "Effort")
                         .WithMany()
-                        .HasForeignKey("EffortId");
+                        .HasForeignKey("EffortId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ProjectFlowManagerModels.ProjectAssessmentReport", "ProjectAssessmentReport")
+                    b.HasOne("ProjectFlowManagerModels.ProjectAssessmentReport", null)
                         .WithMany("Recommendations")
                         .HasForeignKey("ProjectAssessmentReportId");
 
                     b.Navigation("Effort");
-
-                    b.Navigation("ProjectAssessmentReport");
                 });
 
             modelBuilder.Entity("Project_Flow_Manager_Models.Tag", b =>

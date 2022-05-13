@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,88 +9,89 @@ using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager_Administration.Controllers
 {
-    public class ProcessTypesController : Controller
+    public class EffortMeasuresController : Controller
     {
         private readonly ProjectFlowAdministrationContext _context;
 
-        public ProcessTypesController(ProjectFlowAdministrationContext context)
+        public EffortMeasuresController(ProjectFlowAdministrationContext context)
         {
             _context = context;
         }
 
-        // GET: ProcessTypes
+        // GET: EffortMeasures
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Process Types";
-            return View(await _context.ProcessType.ToListAsync());
+            ViewData["Title"] = "Effort Measures";
+            return View(await _context.EffortMeasure.ToListAsync());
         }
 
-        // GET: ProcessTypes/Details/5
+        // GET: EffortMeasures/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id == null || _context.EffortMeasure == null)
             {
                 return NotFound();
             }
 
-            var processType = await _context.ProcessType
+            var effortMeasure = await _context.EffortMeasure
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (processType == null)
+            if (effortMeasure == null)
             {
                 return NotFound();
             }
 
-            return View(processType);
+            return View(effortMeasure);
         }
 
-        // GET: ProcessTypes/Create
+        // GET: EffortMeasures/Create
         public IActionResult Create()
         {
             ViewData["Title"] = "Add an new option";
             return View();
         }
 
-        // POST: ProcessTypes/Create
+        // POST: EffortMeasures/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Value")] ProcessType processType)
+        public async Task<IActionResult> Create([Bind("Id,Value")] EffortMeasure effortMeasure)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(processType);
+                _context.Add(effortMeasure);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["Title"] = "Add an new option";
-            return View(processType);
+            return View(effortMeasure);
         }
 
-        // GET: ProcessTypes/Edit/5
+        // GET: EffortMeasures/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null || _context.EffortMeasure == null)
             {
                 return NotFound();
             }
 
-            var processType = await _context.ProcessType.FindAsync(id);
-            if (processType == null)
+            var effortMeasure = await _context.EffortMeasure.FindAsync(id);
+            if (effortMeasure == null)
             {
                 return NotFound();
             }
-            return View(processType);
+            ViewData["Title"] = "Edit option";
+            return View(effortMeasure);
         }
 
-        // POST: ProcessTypes/Edit/5
+        // POST: EffortMeasures/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Value")] ProcessType processType)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Value")] EffortMeasure effortMeasure)
         {
-            if (id != processType.Id)
+            if (id != effortMeasure.Id)
             {
                 return NotFound();
             }
@@ -100,12 +100,12 @@ namespace Project_Flow_Manager_Administration.Controllers
             {
                 try
                 {
-                    _context.Update(processType);
+                    _context.Update(effortMeasure);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProcessTypeExists(processType.Id))
+                    if (!EffortMeasureExists(effortMeasure.Id))
                     {
                         return NotFound();
                     }
@@ -117,42 +117,50 @@ namespace Project_Flow_Manager_Administration.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["Title"] = "Edit option";
-            return View(processType);
+            return View(effortMeasure);
         }
 
-        // GET: ProcessTypes/Delete/5
+        // GET: EffortMeasures/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _context.EffortMeasure == null)
             {
                 return NotFound();
             }
 
-            var processType = await _context.ProcessType
+            var effortMeasure = await _context.EffortMeasure
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (processType == null)
+            if (effortMeasure == null)
             {
                 return NotFound();
             }
 
             ViewData["Title"] = "Confirm Deletion";
-            return View(processType);
+            return View(effortMeasure);
         }
 
-        // POST: ProcessTypes/Delete/5
+        // POST: EffortMeasures/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var processType = await _context.ProcessType.FindAsync(id);
-            _context.ProcessType.Remove(processType);
+            if (_context.EffortMeasure == null)
+            {
+                return Problem("Entity set 'ProjectFlowAdministrationContext.EffortMeasure'  is null.");
+            }
+            var effortMeasure = await _context.EffortMeasure.FindAsync(id);
+            if (effortMeasure != null)
+            {
+                _context.EffortMeasure.Remove(effortMeasure);
+            }
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProcessTypeExists(int id)
+        private bool EffortMeasureExists(int id)
         {
-            return _context.ProcessType.Any(e => e.Id == id);
+          return (_context.EffortMeasure?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
