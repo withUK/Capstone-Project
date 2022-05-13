@@ -13,10 +13,12 @@ namespace Project_Flow_Manager.Controllers
     public class RecommendationsController : Controller
     {
         private readonly InnovationManagerContext _context;
+        private readonly ProjectFlowAdministrationContext _adminContext;
 
-        public RecommendationsController(InnovationManagerContext context)
+        public RecommendationsController(InnovationManagerContext context, ProjectFlowAdministrationContext adminContext)
         {
             _context = context;
+            _adminContext = adminContext;
         }
 
         // GET: Recommendations
@@ -54,7 +56,8 @@ namespace Project_Flow_Manager.Controllers
         public IActionResult Create()
         {
             ViewData["Title"] = "Add a new recommendation";
-            ViewData["AssessmentId"] = new SelectList(_context.ProjectAssessmentReport, "Id", String.Concat("Id", " ", "Title"));
+            ViewData["AssessmentId"] = new SelectList(_context.ProjectAssessmentReport, "Id", "Title");
+            ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
             return View();
         }
 
@@ -74,6 +77,7 @@ namespace Project_Flow_Manager.Controllers
             
             ViewData["Title"] = "Add a new recommendation";
             ViewData["AssessmentId"] = new SelectList(_context.ProjectAssessmentReport, "Id", "Title");
+            ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
             return View(recommendation);
         }
 

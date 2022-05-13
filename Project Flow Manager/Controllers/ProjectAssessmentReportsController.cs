@@ -88,7 +88,6 @@ namespace Project_Flow_Manager.Controllers
             {
                 return NotFound();
             }
-            ViewData["InnovationId"] = new SelectList(_context.Innovation, "Id", "Description", projectAssessmentReport.InnovationId);
             return View(projectAssessmentReport);
         }
 
@@ -124,7 +123,6 @@ namespace Project_Flow_Manager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InnovationId"] = new SelectList(_context.Innovation, "Id", "Description", projectAssessmentReport.InnovationId);
             return View(projectAssessmentReport);
         }
 

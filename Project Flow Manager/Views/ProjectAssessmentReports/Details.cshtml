@@ -23,7 +23,7 @@
     </dl>
 
     <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
     </div>
 
     <h3>@Html.DisplayNameFor(model => model.Recommendations)</h3>
@@ -45,6 +45,27 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Innovation.Title)
         </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Innovation.Description)
+        </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Innovation.NumberOfPeopleIncluded)
+        </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.NumberOfPeopleIncluded)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Innovation.ProcessDuration)
+        </dt>
+         <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Innovation.ProcessDuration)
+        </dd>
     </dl>
 
 </div>
