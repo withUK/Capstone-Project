@@ -10,6 +10,9 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:ProjectFlowAdministrationContext"
+    },
+    "identityapp1": {
+      "type": "identityapp"
     }
   }
 }
