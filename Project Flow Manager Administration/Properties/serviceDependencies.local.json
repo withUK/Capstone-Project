@@ -12,6 +12,9 @@
     "mssql1": {
       "type": "mssql.local",
       "connectionId": "ConnectionStrings:ProjectFlowAdministrationContext"
+    },
+    "identityapp1": {
+      "type": "identityapp.aad"
     }
   }
 }
