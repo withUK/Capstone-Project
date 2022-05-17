@@ -150,7 +150,7 @@ namespace Project_Flow_Manager.Controllers
 
             ViewData["Title"] = "Edit an idea";
             ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
-            
+
             return View(innovation);
         }
 
@@ -178,7 +178,7 @@ namespace Project_Flow_Manager.Controllers
             ViewData["Title"] = "Confirm Deletion";
             return View(innovation);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -202,7 +202,7 @@ namespace Project_Flow_Manager.Controllers
         public IActionResult ProcessSteps(int innovationId)
         {
             var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
-            
+
             if (innovation == null)
             {
                 return NotFound();
@@ -221,7 +221,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> AddProcessStep(int innovationId)
         {
             var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
-            
+
             if (innovation == null)
             {
                 return NotFound();
@@ -255,7 +255,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> AddProcessStep([Bind("Value,OrderPosition")] ProcessStep processStep, int innovationId)
         {
             var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
-            
+
             if (innovation == null)
             {
                 return NotFound();
@@ -337,7 +337,7 @@ namespace Project_Flow_Manager.Controllers
             }
 
             var processStep = await _context.ProcessStep.FirstOrDefaultAsync(m => m.Id == id);
-            
+
             if (processStep == null)
             {
                 return NotFound();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager_Models;
 
@@ -153,14 +148,14 @@ namespace Project_Flow_Manager_Administration.Controllers
             {
                 _context.EffortMeasure.Remove(effortMeasure);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EffortMeasureExists(int id)
         {
-          return (_context.EffortMeasure?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.EffortMeasure?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

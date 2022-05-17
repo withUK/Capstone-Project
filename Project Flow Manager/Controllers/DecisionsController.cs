@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager.Controllers
 {
@@ -25,7 +24,8 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Decisions";
-            return View(await _context.ProjectAssessmentReport.Include(i => i.Innovation).ToListAsync());
+            var projectAssessmentReports = _context.ProjectAssessmentReport.Where(p => p.Status.Equals("Eligible for descision")).ToList();
+            return View(projectAssessmentReports);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Project_Flow_Manager.Controllers
                 .Include(m => m.Innovation)
                 .Include(m => m.Recommendations)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            
+
             if (projectAssessmentReport == null)
             {
                 return NotFound();

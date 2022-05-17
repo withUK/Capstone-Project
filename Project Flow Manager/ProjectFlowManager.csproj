@@ -32,8 +32,4 @@
     <ProjectReference Include="..\Project Flow Manager Models\ProjectFlowManagerModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>

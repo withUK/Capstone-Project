@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager.Enums;
 using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
 
@@ -51,7 +52,7 @@ namespace Project_Flow_Manager.Controllers
                 .Include(p => p.Innovation.ProcessSteps)
                 .Include(p => p.Innovation.Approval)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            
+
             if (projectAssessmentReport == null)
             {
                 return NotFound();
@@ -359,11 +360,11 @@ namespace Project_Flow_Manager.Controllers
 
             var recommendation = await _context.Recommendation.FirstOrDefaultAsync(m => m.Id == id);
             _context.Recommendation.Remove(recommendation);
-            
+
             UpdateAssessmentStatus(projectAssessmentReport);
             _context.Update(projectAssessmentReport);
             await _context.SaveChangesAsync();
-            
+
             ViewData["ActionMessage"] = "Recommendation has been removed";
             ViewData["ActionResult"] = "success";
 
@@ -376,7 +377,7 @@ namespace Project_Flow_Manager.Controllers
         /// <param name="projectAssessmentReport"></param>
         private static void UpdateAssessmentStatus(ProjectAssessmentReport projectAssessmentReport)
         {
-            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? "Eligible for descision" : "Awaiting further recommendations";
+            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? StatusEnum.EligibleForDescision.ToString() : StatusEnum.AwaitingFurtherRecommendations.ToString();
         }
 
         /// <summary>
