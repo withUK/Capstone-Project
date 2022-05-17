@@ -16,6 +16,8 @@ namespace ProjectFlowManagerModels
         public int InnovationId { get; set; }
         public virtual Innovation? Innovation { get; set; }
 
+        public int? ChosenRecommendationId { get; set; }
+
         public virtual ICollection<Recommendation>? Recommendations { get; set; }
         public virtual ICollection<Comment>? Comments { get; set; }
         public virtual ICollection<Attachment>? Attachments { get; set; }

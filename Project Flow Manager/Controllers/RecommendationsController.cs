@@ -70,6 +70,8 @@ namespace Project_Flow_Manager.Controllers
         {
             if (ModelState.IsValid)
             {
+
+
                 _context.Add(recommendation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
