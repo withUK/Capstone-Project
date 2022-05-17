@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager.Enums;
+using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
 
@@ -377,7 +378,7 @@ namespace Project_Flow_Manager.Controllers
         /// <param name="projectAssessmentReport"></param>
         private static void UpdateAssessmentStatus(ProjectAssessmentReport projectAssessmentReport)
         {
-            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? StatusEnum.EligibleForDescision.ToString() : StatusEnum.AwaitingFurtherRecommendations.ToString();
+            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? EnumHelper.GetDisplayName(StatusEnum.EligibleForDescision) : EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations);
         }
 
         /// <summary>
