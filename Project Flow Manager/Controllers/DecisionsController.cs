@@ -18,12 +18,21 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Decisions";
             return View(await _context.ProjectAssessmentReport.Include(i => i.Innovation).ToListAsync());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Review(int? id)
         {
             if (id == null)
@@ -45,6 +54,11 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> SelectRecommendation(int id)
         {
             var choice = _context.Recommendation.Where(r => r.Id == id).Include(r => r.ProjectAssessmentReport).FirstOrDefault();

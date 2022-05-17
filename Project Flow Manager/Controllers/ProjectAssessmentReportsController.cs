@@ -21,6 +21,10 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Assessments";
@@ -28,6 +32,11 @@ namespace Project_Flow_Manager.Controllers
             return View(await _context.ProjectAssessmentReport.Include(i => i.Innovation).ToListAsync());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,12 +61,21 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             ViewData["InnovationId"] = new SelectList(_context.Innovation, "Id", "Description");
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectAssessmentReport"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Status,InnovationId")] ProjectAssessmentReport projectAssessmentReport)
@@ -72,6 +90,11 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,6 +110,12 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReport"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Status,InnovationId")] ProjectAssessmentReport projectAssessmentReport)
@@ -119,6 +148,11 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +171,11 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -147,6 +186,11 @@ namespace Project_Flow_Manager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         public IActionResult AddRecommendation(int projectAssessmentReportId)
         {
             var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).FirstOrDefault();
@@ -165,6 +209,13 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recommendation"></param>
+        /// <param name="effort"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
@@ -196,6 +247,11 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> RecommendationDetails(int? id)
         {
             if (id == null)
@@ -215,6 +271,12 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> EditRecommendation(int id, int projectAssessmentReportId)
         {
             if (id == null)
@@ -233,6 +295,13 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recommendation"></param>
+        /// <param name="effort"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
@@ -250,6 +319,12 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReportId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> DeleteRecommendation(int? id, int projectAssessmentReportId)
         {
             if (id == null)
@@ -269,6 +344,12 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("DeleteRecommendation")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRecommendationConfirmed(int id, int projectAssessmentReportId)
@@ -289,11 +370,20 @@ namespace Project_Flow_Manager.Controllers
             return RedirectToAction(nameof(Details), new { id = projectAssessmentReportId });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectAssessmentReport"></param>
         private static void UpdateAssessmentStatus(ProjectAssessmentReport projectAssessmentReport)
         {
             projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? "Eligible for descision" : "Awaiting further recommendations";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool ProjectAssessmentReportExists(int id)
         {
             return _context.ProjectAssessmentReport.Any(e => e.Id == id);
