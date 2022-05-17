@@ -7,6 +7,9 @@ using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class ProjectAssessmentReportsController : Controller
     {
         private readonly InnovationManagerContext _context;
@@ -18,7 +21,6 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
-        // GET: ProjectAssessmentReports
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Assessments";
@@ -26,7 +28,6 @@ namespace Project_Flow_Manager.Controllers
             return View(await _context.ProjectAssessmentReport.Include(i => i.Innovation).ToListAsync());
         }
 
-        // GET: ProjectAssessmentReports/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,16 +52,12 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // GET: ProjectAssessmentReports/Create
         public IActionResult Create()
         {
             ViewData["InnovationId"] = new SelectList(_context.Innovation, "Id", "Description");
             return View();
         }
 
-        // POST: ProjectAssessmentReports/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Status,InnovationId")] ProjectAssessmentReport projectAssessmentReport)
@@ -75,7 +72,6 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // GET: ProjectAssessmentReports/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,9 +87,6 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // POST: ProjectAssessmentReports/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Status,InnovationId")] ProjectAssessmentReport projectAssessmentReport)
@@ -126,7 +119,6 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // GET: ProjectAssessmentReports/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,7 +137,6 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // POST: ProjectAssessmentReports/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

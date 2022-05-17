@@ -4,6 +4,9 @@ using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class InnovationsController : Controller
     {
         private readonly InnovationManagerContext _context;

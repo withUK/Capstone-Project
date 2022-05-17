@@ -10,6 +10,9 @@ using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class ApprovalsController : Controller
     {
         private readonly InnovationManagerContext _context;
@@ -19,13 +22,11 @@ namespace Project_Flow_Manager.Controllers
             _context = context;
         }
 
-        // GET: Approvals
         public async Task<IActionResult> Index()
         {
             return View(await _context.Approval.ToListAsync());
         }
 
-        // GET: Approvals/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,15 +44,11 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // GET: Approvals/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Approvals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Type,Reason,Outcome,ApprovedBy,ApprovedOn")] Approval approval)
@@ -65,7 +62,6 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // GET: Approvals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,9 +77,6 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // POST: Approvals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Reason,Outcome,ApprovedBy,ApprovedOn")] Approval approval)
@@ -116,7 +109,6 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // GET: Approvals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,8 +126,7 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // POST: Approvals/Delete/5
-        [HttpPost, ActionName("Delete")]
+#elif   [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
