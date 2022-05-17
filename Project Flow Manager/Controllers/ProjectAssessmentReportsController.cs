@@ -192,6 +192,7 @@ namespace Project_Flow_Manager.Controllers
                 recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
 
                 projectAssessmentReport.Recommendations.Add(recommendation);
+                projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? "Eligible for descision" : projectAssessmentReport.Status;
                 _context.ProjectAssessmentReport.Update(projectAssessmentReport);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = projectAssessmentReport.Id });
