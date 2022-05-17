@@ -192,7 +192,7 @@ namespace Project_Flow_Manager.Controllers
                 recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
 
                 projectAssessmentReport.Recommendations.Add(recommendation);
-                projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? "Eligible for descision" : projectAssessmentReport.Status;
+                UpdateAssessmentStatus(projectAssessmentReport);
                 _context.ProjectAssessmentReport.Update(projectAssessmentReport);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = projectAssessmentReport.Id });
@@ -287,11 +287,20 @@ namespace Project_Flow_Manager.Controllers
 
             var recommendation = await _context.Recommendation.FirstOrDefaultAsync(m => m.Id == id);
             _context.Recommendation.Remove(recommendation);
+            
+            UpdateAssessmentStatus(projectAssessmentReport);
+            _context.Update(projectAssessmentReport);
             await _context.SaveChangesAsync();
+            
             ViewData["ActionMessage"] = "Recommendation has been removed";
             ViewData["ActionResult"] = "success";
 
             return RedirectToAction(nameof(Details), new { id = projectAssessmentReportId });
+        }
+
+        private static void UpdateAssessmentStatus(ProjectAssessmentReport projectAssessmentReport)
+        {
+            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? "Eligible for descision" : "Awaiting further recommendations";
         }
 
         private bool ProjectAssessmentReportExists(int id)
