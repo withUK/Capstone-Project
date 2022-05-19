@@ -17,8 +17,11 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="col-sm-9">
+                    <th class="col-sm-7">
                         @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Recommendations)
                     </th>
                     <th class="col-sm-2">
                         @Html.DisplayNameFor(model => model.Status)
@@ -32,6 +35,9 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @item.Recommendations.Count()
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)

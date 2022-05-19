@@ -6,7 +6,10 @@ namespace ProjectFlowManagerModels
     {
         public ProjectAssessmentReport()
         {
-            Status = "New";
+            Approvals = new List<Approval>();
+            Recommendations = new List<Recommendation>();
+            Comments = new List<Comment>();
+            Approvals = new List<Approval>();
         }
 
         public int Id { get; set; }

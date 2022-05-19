@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager.Enums;
 using Project_Flow_Manager.Helpers;
 using ProjectFlowManagerModels;
 
@@ -111,7 +112,7 @@ namespace Project_Flow_Manager.Controllers
                 innovation.Approval = approval;
                 _context.Innovation.Update(innovation);
 
-                ProjectAssessmentReport report = new ProjectAssessmentReport { Title = innovation.Title, Innovation = innovation };
+                ProjectAssessmentReport report = new ProjectAssessmentReport { Title = innovation.Title, Innovation = innovation, Status = EnumHelper.GetDisplayName(StatusEnum.New) };
                 _context.ProjectAssessmentReport.Add(report);
 
                 await _context.SaveChangesAsync();
