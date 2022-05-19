@@ -8,7 +8,7 @@ namespace Project_Flow_Manager_Models
 
         [Display(Name = "Instruction")]
         public string Value { get; set; }
-        
+
         [Display(Name = "Position")]
         public int OrderPosition { get; set; }
     }

@@ -1,8 +1,4 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +6,9 @@ using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class RecommendationsController : Controller
     {
         private readonly InnovationManagerContext _context;
@@ -21,7 +20,10 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
-        // GET: Recommendations
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Recommendations";
@@ -32,7 +34,11 @@ namespace Project_Flow_Manager.Controllers
                 .ToListAsync());
         }
 
-        // GET: Recommendations/Details/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,7 +58,10 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
-        // GET: Recommendations/Create
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             ViewData["Title"] = "Add a new recommendation";
@@ -61,27 +70,36 @@ namespace Project_Flow_Manager.Controllers
             return View();
         }
 
-        // POST: Recommendations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recommendation"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Details,CreatedBy,CreatedDate")] Recommendation recommendation)
         {
             if (ModelState.IsValid)
             {
+
+
                 _context.Add(recommendation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
             ViewData["Title"] = "Add a new recommendation";
             ViewData["AssessmentId"] = new SelectList(_context.ProjectAssessmentReport, "Id", "Title");
             ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
             return View(recommendation);
         }
 
-        // GET: Recommendations/Edit/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int? id, int projectAssessmentReportId)
         {
             if (id == null)
@@ -100,9 +118,12 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
-        // POST: Recommendations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="recommendation"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Details,CreatedBy,CreatedDate")] Recommendation recommendation)
@@ -138,7 +159,11 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
-        // GET: Recommendations/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -157,7 +182,11 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
-        // POST: Recommendations/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -168,6 +197,11 @@ namespace Project_Flow_Manager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool RecommendationExists(int id)
         {
             return _context.Recommendation.Any(e => e.Id == id);

@@ -1,15 +1,13 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class ApprovalsController : Controller
     {
         private readonly InnovationManagerContext _context;
@@ -19,13 +17,20 @@ namespace Project_Flow_Manager.Controllers
             _context = context;
         }
 
-        // GET: Approvals
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             return View(await _context.Approval.ToListAsync());
         }
 
-        // GET: Approvals/Details/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,15 +48,20 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // GET: Approvals/Create
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Approvals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="approval"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Type,Reason,Outcome,ApprovedBy,ApprovedOn")] Approval approval)
@@ -65,7 +75,11 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // GET: Approvals/Edit/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,9 +95,12 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // POST: Approvals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="approval"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Reason,Outcome,ApprovedBy,ApprovedOn")] Approval approval)
@@ -116,7 +133,11 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // GET: Approvals/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +155,11 @@ namespace Project_Flow_Manager.Controllers
             return View(approval);
         }
 
-        // POST: Approvals/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

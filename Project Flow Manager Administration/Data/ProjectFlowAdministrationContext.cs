@@ -4,7 +4,7 @@ using Project_Flow_Manager_Models;
 
 public class ProjectFlowAdministrationContext : DbContext
 {
-    public ProjectFlowAdministrationContext (DbContextOptions<ProjectFlowAdministrationContext> options)
+    public ProjectFlowAdministrationContext(DbContextOptions<ProjectFlowAdministrationContext> options)
         : base(options)
     {
     }

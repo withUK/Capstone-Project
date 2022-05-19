@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ProjectFlowManagerModels
+﻿namespace ProjectFlowManagerModels
 {
     public class Comment
     {
