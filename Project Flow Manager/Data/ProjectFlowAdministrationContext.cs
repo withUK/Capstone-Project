@@ -2,9 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager_Models;
 
+/// <summary>
+/// TODO
+/// </summary>
 public class ProjectFlowAdministrationContext : DbContext
 {
-    public ProjectFlowAdministrationContext (DbContextOptions<ProjectFlowAdministrationContext> options)
+    public ProjectFlowAdministrationContext(DbContextOptions<ProjectFlowAdministrationContext> options)
         : base(options)
     {
     }

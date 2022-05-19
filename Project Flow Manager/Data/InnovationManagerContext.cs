@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
 
+/// <summary>
+/// TODO
+/// </summary>
 public class InnovationManagerContext : DbContext
+{
+    public InnovationManagerContext(DbContextOptions<InnovationManagerContext> options)
+        : base(options)
     {
-        public InnovationManagerContext (DbContextOptions<InnovationManagerContext> options)
-            : base(options)
-        {
-        }
+    }
 
     public DbSet<Innovation> Innovation { get; set; }
 

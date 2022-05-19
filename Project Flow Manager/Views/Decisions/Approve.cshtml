@@ -1,8 +1,8 @@
 ﻿@model ProjectFlowManagerModels.Approval
 
-<a asp-action="Index" asp-controller="InnovationApprovals" class="link-back">Back</a>
+<a asp-action="Index" asp-controller="Decisions" class="link-back">Back</a>
 
-<h1>Approvals</h1>
+<h1>Decisions</h1>
 <h2>@ViewData["Title"]</h2>
 
 <div class="row">
@@ -14,7 +14,7 @@
                 <textarea asp-for="Reason" rows="5" class="form-control-textarea"></textarea>
                 <span asp-validation-for="Reason" class="text-danger"></span>
             </div>
-            <input type="hidden" value=@ViewData["InnovationId"] id="innovationId" name="InnovationId" />
+            <input type="hidden" value=@ViewData["ProjectAssessmentReportId"] id="projectAssessmentReportId" name="ProjectAssessmentReportId" />
             <div class="form-group">
                 <input type="submit" value="Confirm" class="btn btn-primary" />
             </div>

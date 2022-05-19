@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Project_Flow_Manager_Models;
+using Project_Flow_Manager.Enums;
+using Project_Flow_Manager.Helpers;
 using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class InnovationApprovalsController : Controller
     {
         private readonly InnovationManagerContext _context;
@@ -16,12 +20,21 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Approvals";
-            return View(await _context.Innovation.Where(i => string.Equals(i.Status, "New")).ToListAsync());
+            return View(DatabaseHelper.GetInnovationSubmissionsForApproval(_context));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Review(int? id)
         {
             if (id == null)
@@ -41,6 +54,11 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Approve(int? id)
         {
             if (id == null)
@@ -54,6 +72,12 @@ namespace Project_Flow_Manager.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="approval"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Approve")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApproveConfirmed([Bind("Reason")] Approval approval, int innovationId)
@@ -88,7 +112,7 @@ namespace Project_Flow_Manager.Controllers
                 innovation.Approval = approval;
                 _context.Innovation.Update(innovation);
 
-                ProjectAssessmentReport report = new ProjectAssessmentReport{ Title = innovation.Title, Innovation = innovation };
+                ProjectAssessmentReport report = new ProjectAssessmentReport { Title = innovation.Title, Innovation = innovation, Status = EnumHelper.GetDisplayName(StatusEnum.New) };
                 _context.ProjectAssessmentReport.Add(report);
 
                 await _context.SaveChangesAsync();
@@ -101,6 +125,11 @@ namespace Project_Flow_Manager.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Decline(int? id)
         {
             if (id == null)
@@ -114,6 +143,12 @@ namespace Project_Flow_Manager.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="approval"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Decline")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeclineConfirmed([Bind("Reason")] Approval approval, int innovationId)

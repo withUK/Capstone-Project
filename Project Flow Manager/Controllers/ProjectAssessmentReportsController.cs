@@ -2,11 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager.Enums;
+using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class ProjectAssessmentReportsController : Controller
     {
         private readonly InnovationManagerContext _context;
@@ -18,15 +23,25 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
-        // GET: ProjectAssessmentReports
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Assessments";
-            ViewData["InnovationCount"] = _context.Innovation.Count();
-            return View(await _context.ProjectAssessmentReport.Include(i => i.Innovation).ToListAsync());
+            ViewData["InnovationCount"] = _context.ProjectAssessmentReport
+                .Where(i => i.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.New)))
+                .Count();
+
+            return View(DatabaseHelper.GetAssessmentReports(_context));
         }
 
-        // GET: ProjectAssessmentReports/Details/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,14 +49,8 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = await _context.ProjectAssessmentReport
-                .Include(p => p.Recommendations)
-                .ThenInclude(r => r.Effort)
-                .Include(p => p.Innovation)
-                .Include(p => p.Innovation.ProcessSteps)
-                .Include(p => p.Innovation.Approval)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
+
             if (projectAssessmentReport == null)
             {
                 return NotFound();
@@ -51,16 +60,21 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // GET: ProjectAssessmentReports/Create
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             ViewData["InnovationId"] = new SelectList(_context.Innovation, "Id", "Description");
             return View();
         }
 
-        // POST: ProjectAssessmentReports/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectAssessmentReport"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Status,InnovationId")] ProjectAssessmentReport projectAssessmentReport)
@@ -75,7 +89,11 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // GET: ProjectAssessmentReports/Edit/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,7 +101,8 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = await _context.ProjectAssessmentReport.FindAsync(id);
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
+
             if (projectAssessmentReport == null)
             {
                 return NotFound();
@@ -91,9 +110,12 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // POST: ProjectAssessmentReports/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReport"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Status,InnovationId")] ProjectAssessmentReport projectAssessmentReport)
@@ -126,7 +148,11 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // GET: ProjectAssessmentReports/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,9 +160,8 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = await _context.ProjectAssessmentReport
-                .Include(p => p.Innovation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
+
             if (projectAssessmentReport == null)
             {
                 return NotFound();
@@ -145,20 +170,28 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReport);
         }
 
-        // POST: ProjectAssessmentReports/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var projectAssessmentReport = await _context.ProjectAssessmentReport.FindAsync(id);
-            _context.ProjectAssessmentReport.Remove(projectAssessmentReport);
+            _context.ProjectAssessmentReport.Remove(DatabaseHelper.GetProjectAssessmentReport(id, _context));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         public IActionResult AddRecommendation(int projectAssessmentReportId)
         {
-            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(projectAssessmentReportId, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -174,11 +207,18 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recommendation"></param>
+        /// <param name="effort"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
         {
-            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).Include(i => i.Recommendations).FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(projectAssessmentReportId, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -192,6 +232,7 @@ namespace Project_Flow_Manager.Controllers
                 recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
 
                 projectAssessmentReport.Recommendations.Add(recommendation);
+                UpdateAssessmentStatus(projectAssessmentReport);
                 _context.ProjectAssessmentReport.Update(projectAssessmentReport);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = projectAssessmentReport.Id });
@@ -204,6 +245,11 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> RecommendationDetails(int? id)
         {
             if (id == null)
@@ -223,6 +269,12 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> EditRecommendation(int id, int projectAssessmentReportId)
         {
             if (id == null)
@@ -241,6 +293,13 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recommendation"></param>
+        /// <param name="effort"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
@@ -258,6 +317,12 @@ namespace Project_Flow_Manager.Controllers
             return View(projectAssessmentReportId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> DeleteRecommendation(int? id, int projectAssessmentReportId)
         {
             if (id == null)
@@ -277,22 +342,47 @@ namespace Project_Flow_Manager.Controllers
             return View(recommendation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="projectAssessmentReportId"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("DeleteRecommendation")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRecommendationConfirmed(int id, int projectAssessmentReportId)
         {
-            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).Include(i => i.Recommendations).FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
+
             ViewData["Title"] = string.Concat("Recommendation for ", projectAssessmentReport.Title);
 
             var recommendation = await _context.Recommendation.FirstOrDefaultAsync(m => m.Id == id);
             _context.Recommendation.Remove(recommendation);
+
+            UpdateAssessmentStatus(projectAssessmentReport);
+            _context.Update(projectAssessmentReport);
             await _context.SaveChangesAsync();
+
             ViewData["ActionMessage"] = "Recommendation has been removed";
             ViewData["ActionResult"] = "success";
 
             return RedirectToAction(nameof(Details), new { id = projectAssessmentReportId });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectAssessmentReport"></param>
+        private static void UpdateAssessmentStatus(ProjectAssessmentReport projectAssessmentReport)
+        {
+            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? EnumHelper.GetDisplayName(StatusEnum.EligibleForDecision) : EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool ProjectAssessmentReportExists(int id)
         {
             return _context.ProjectAssessmentReport.Any(e => e.Id == id);

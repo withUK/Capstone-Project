@@ -10,43 +10,43 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>
+                    <th class="col-sm-3">
                         @Html.DisplayNameFor(model => model.Title)
                     </th>
-                    <th>
+                    <th class="col-sm-2">
                         @Html.DisplayNameFor(model => model.SubmittedDate)
                     </th>
-                    <th>
+                    <th class="col-sm-2">
                         @Html.DisplayNameFor(model => model.SubmittedBy)
                     </th>
-                    <th>
+                    <th class="col-sm-2">
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
-                    <th>
+                    <th class="col-sm-2">
                         @Html.DisplayNameFor(model => model.RequiredDate)
                     </th>
-                    <th></th>
+                    <th class="col-sm-1"></th>
                 </tr>
             </thead>
             <tbody>
         @foreach (var item in Model) {
                 <tr>
-                    <td>
+                    <td class="col-sm-3">
                         @Html.DisplayFor(modelItem => item.Title)
                     </td>
-                    <td>
+                    <td class="col-sm-2">
                         @Html.DisplayFor(modelItem => item.SubmittedDate)
                     </td>
-                    <td>
+                    <td class="col-sm-2">
                         @Html.DisplayFor(modelItem => item.SubmittedBy)
                     </td>
-                    <td>
+                    <td class="col-sm-2">
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
-                    <td>
+                    <td class="col-sm-2">
                         @Html.DisplayFor(modelItem => item.RequiredDate)
                     </td>
-                    <td>
+                    <td class="col-sm-1">
                         <a asp-action="Review" asp-route-id="@item.Id">Review</a>
                     </td>
                 </tr>

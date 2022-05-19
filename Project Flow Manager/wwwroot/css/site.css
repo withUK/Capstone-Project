@@ -36,3 +36,8 @@ body {
     box-shadow: 0 3px 0 #a0101e;
     border-color: #dc3545;
 }
+
+.btn-narrow {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}

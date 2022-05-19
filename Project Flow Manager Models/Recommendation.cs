@@ -6,7 +6,7 @@ namespace Project_Flow_Manager_Models
     public class Recommendation
     {
         public int Id { get; set; }
-        
+
         public string Details { get; set; }
 
         public int? EffortId { get; set; }
@@ -14,7 +14,7 @@ namespace Project_Flow_Manager_Models
 
         [Display(Name = "Created By")]
         public string? CreatedBy { get; set; }
-        
+
         [Display(Name = "Created Date")]
         public DateTime? CreatedDate { get; set; }
 

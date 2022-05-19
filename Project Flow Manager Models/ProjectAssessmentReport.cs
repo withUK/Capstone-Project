@@ -6,7 +6,10 @@ namespace ProjectFlowManagerModels
     {
         public ProjectAssessmentReport()
         {
-            Status = "New";
+            Approvals = new List<Approval>();
+            Recommendations = new List<Recommendation>();
+            Comments = new List<Comment>();
+            Approvals = new List<Approval>();
         }
 
         public int Id { get; set; }
@@ -15,6 +18,8 @@ namespace ProjectFlowManagerModels
 
         public int InnovationId { get; set; }
         public virtual Innovation? Innovation { get; set; }
+
+        public int? ChosenRecommendationId { get; set; }
 
         public virtual ICollection<Recommendation>? Recommendations { get; set; }
         public virtual ICollection<Comment>? Comments { get; set; }

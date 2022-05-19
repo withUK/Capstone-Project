@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager.Controllers
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class InnovationsController : Controller
     {
         private readonly InnovationManagerContext _context;
@@ -15,12 +19,21 @@ namespace Project_Flow_Manager.Controllers
             _adminContext = adminContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Submissions";
-            return View(await _context.Innovation.ToListAsync());
+            return View(DatabaseHelper.GetCurrentUserInnovationSubmissions(User.Identity.Name, _context));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,6 +53,10 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             ViewData["Title"] = "Add a new idea";
@@ -48,6 +65,11 @@ namespace Project_Flow_Manager.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="innovation"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
@@ -68,6 +90,11 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation.Id);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +113,12 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="innovation"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
@@ -118,10 +151,15 @@ namespace Project_Flow_Manager.Controllers
 
             ViewData["Title"] = "Edit an idea";
             ViewBag.StatusOptions = _adminContext.Status.Select(s => s.Value).ToList();
-            
+
             return View(innovation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,6 +180,11 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -152,10 +195,15 @@ namespace Project_Flow_Manager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         public IActionResult ProcessSteps(int innovationId)
         {
             var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
-            
+
             if (innovation == null)
             {
                 return NotFound();
@@ -166,10 +214,15 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> AddProcessStep(int innovationId)
         {
             var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
-            
+
             if (innovation == null)
             {
                 return NotFound();
@@ -192,12 +245,18 @@ namespace Project_Flow_Manager.Controllers
             return View(step);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="processStep"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProcessStep([Bind("Value,OrderPosition")] ProcessStep processStep, int innovationId)
         {
             var innovation = _context.Innovation.Where(i => i.Id == innovationId).Include(i => i.ProcessSteps).FirstOrDefault();
-            
+
             if (innovation == null)
             {
                 return NotFound();
@@ -220,6 +279,12 @@ namespace Project_Flow_Manager.Controllers
             return View(innovation.Id);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> EditProcessStep(int id, int innovationId)
         {
             if (id == null)
@@ -238,6 +303,12 @@ namespace Project_Flow_Manager.Controllers
             return View(step);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="processStep"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProcessStep([Bind("Value,OrderPosition")] ProcessStep processStep, int innovationId)
@@ -253,6 +324,12 @@ namespace Project_Flow_Manager.Controllers
             return View(innovationId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> DeleteProcessStep(int? id, int innovationId)
         {
             if (id == null)
@@ -261,7 +338,7 @@ namespace Project_Flow_Manager.Controllers
             }
 
             var processStep = await _context.ProcessStep.FirstOrDefaultAsync(m => m.Id == id);
-            
+
             if (processStep == null)
             {
                 return NotFound();
@@ -272,6 +349,12 @@ namespace Project_Flow_Manager.Controllers
             return View(processStep);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("DeleteProcessStep")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProcessStepConfirmed(int id, int innovationId)
@@ -288,6 +371,11 @@ namespace Project_Flow_Manager.Controllers
             return RedirectToAction(nameof(ProcessSteps), new { innovationId = innovationId });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool InnovationExists(int id)
         {
             return _context.Innovation.Any(e => e.Id == id);
