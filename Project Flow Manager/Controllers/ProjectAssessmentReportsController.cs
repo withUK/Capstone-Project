@@ -30,8 +30,11 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Assessments";
-            ViewData["InnovationCount"] = _context.Innovation.Count();
-            return View(await _context.ProjectAssessmentReport.Include(i => i.Innovation).ToListAsync());
+            ViewData["InnovationCount"] = _context.Innovation
+                .Where(i => i.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.New)))
+                .Count();
+
+            return View(DatabaseHelper.GetAssessmentReports(_context));
         }
 
         /// <summary>
@@ -46,13 +49,7 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = await _context.ProjectAssessmentReport
-                .Include(p => p.Recommendations)
-                .ThenInclude(r => r.Effort)
-                .Include(p => p.Innovation)
-                .Include(p => p.Innovation.ProcessSteps)
-                .Include(p => p.Innovation.Approval)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -104,7 +101,8 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = await _context.ProjectAssessmentReport.FindAsync(id);
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
+
             if (projectAssessmentReport == null)
             {
                 return NotFound();
@@ -162,9 +160,8 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = await _context.ProjectAssessmentReport
-                .Include(p => p.Innovation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
+
             if (projectAssessmentReport == null)
             {
                 return NotFound();
@@ -182,8 +179,7 @@ namespace Project_Flow_Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var projectAssessmentReport = await _context.ProjectAssessmentReport.FindAsync(id);
-            _context.ProjectAssessmentReport.Remove(projectAssessmentReport);
+            _context.ProjectAssessmentReport.Remove(DatabaseHelper.GetProjectAssessmentReport(id, _context));
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -195,7 +191,7 @@ namespace Project_Flow_Manager.Controllers
         /// <returns></returns>
         public IActionResult AddRecommendation(int projectAssessmentReportId)
         {
-            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(projectAssessmentReportId, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -222,7 +218,7 @@ namespace Project_Flow_Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
         {
-            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).Include(i => i.Recommendations).FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(projectAssessmentReportId, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -356,7 +352,8 @@ namespace Project_Flow_Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRecommendationConfirmed(int id, int projectAssessmentReportId)
         {
-            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(i => i.Id == projectAssessmentReportId).Include(i => i.Recommendations).FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
+
             ViewData["Title"] = string.Concat("Recommendation for ", projectAssessmentReport.Title);
 
             var recommendation = await _context.Recommendation.FirstOrDefaultAsync(m => m.Id == id);

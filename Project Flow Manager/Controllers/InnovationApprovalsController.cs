@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager.Helpers;
 using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
@@ -25,7 +26,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Approvals";
-            return View(await _context.Innovation.Where(i => string.Equals(i.Status, "New")).ToListAsync());
+            return View(DatabaseHelper.GetInnovationSubmissionsForApproval(_context));
         }
 
         /// <summary>

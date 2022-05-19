@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager.Controllers
@@ -25,7 +26,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Submissions";
-            return View(await _context.Innovation.ToListAsync());
+            return View(DatabaseHelper.GetCurrentUserInnovationSubmissions(User.Identity.Name, _context));
         }
 
         /// <summary>
