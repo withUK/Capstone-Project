@@ -378,7 +378,7 @@ namespace Project_Flow_Manager.Controllers
         /// <param name="projectAssessmentReport"></param>
         private static void UpdateAssessmentStatus(ProjectAssessmentReport projectAssessmentReport)
         {
-            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? EnumHelper.GetDisplayName(StatusEnum.EligibleForDescision) : EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations);
+            projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? EnumHelper.GetDisplayName(StatusEnum.EligibleForDecision) : EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations);
         }
 
         /// <summary>

@@ -27,8 +27,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Decisions";
-            var projectAssessmentReports = _context.ProjectAssessmentReport.Where(p => p.Status.Equals("Eligible for descision")).ToList();
-            return View(projectAssessmentReports);
+            return View(DatabaseHelper.GetReportsForDecision(_context));
         }
 
         /// <summary>
@@ -43,10 +42,7 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = await _context.ProjectAssessmentReport
-                .Include(m => m.Innovation)
-                .Include(m => m.Recommendations)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(id, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -108,17 +104,7 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            approval.ApprovedOn = DateTime.Now;
-            approval.ApprovedBy = GetCurrentUser();
-            approval.Outcome = "Approved";
-            approval.Type = "Project Assessment Report";
-
-            var projectAssessmentReport = _context.ProjectAssessmentReport
-                .Where(i => i.Id == projectAssessmentReportId)
-                .Include(i => i.Recommendations)
-                .Include(i => i.Attachments)
-                .Include(i => i.Comments)
-                .FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(projectAssessmentReportId, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -127,10 +113,16 @@ namespace Project_Flow_Manager.Controllers
 
             if (ModelState.IsValid)
             {
+                approval.ApprovedOn = DateTime.Now;
+                approval.ApprovedBy = GetCurrentUser();
+                approval.Outcome = EnumHelper.GetDisplayName(StatusEnum.Approved);
+                approval.Type = EnumHelper.GetDisplayName(ApprovalTypeEnum.ProjectAssessmentReport);
+
                 _context.Approval.Add(approval);
 
-                projectAssessmentReport.Status = EnumHelper.GetDisplayName(StatusEnum.PassedToDevelopement);
                 projectAssessmentReport.Approvals.Add(approval);
+                SetDecisionStatus(projectAssessmentReport);
+
                 _context.ProjectAssessmentReport.Update(projectAssessmentReport);
 
                 await _context.SaveChangesAsync();
@@ -176,12 +168,7 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var projectAssessmentReport = _context.ProjectAssessmentReport
-                .Where(i => i.Id == projectAssessmentReportId)
-                .Include(i => i.Recommendations)
-                .Include(i => i.Attachments)
-                .Include(i => i.Comments)
-                .FirstOrDefault();
+            var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(projectAssessmentReportId, _context);
 
             if (projectAssessmentReport == null)
             {
@@ -191,13 +178,15 @@ namespace Project_Flow_Manager.Controllers
             if (ModelState.IsValid)
             {
                 approval.ApprovedOn = DateTime.Now;
-                approval.ApprovedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
-                approval.Outcome = "Declined";
-                approval.Type = "Innovation Submission";
+                approval.ApprovedBy = GetCurrentUser();
+                approval.Outcome = EnumHelper.GetDisplayName(StatusEnum.Declined);
+                approval.Type = EnumHelper.GetDisplayName(ApprovalTypeEnum.ProjectAssessmentReport);
+
                 _context.Approval.Add(approval);
 
-                projectAssessmentReport.Status = "Declined";
                 projectAssessmentReport.Approvals.Add(approval);
+                SetDecisionStatus(projectAssessmentReport);
+
                 _context.ProjectAssessmentReport.Update(projectAssessmentReport);
 
                 await _context.SaveChangesAsync();
@@ -208,6 +197,18 @@ namespace Project_Flow_Manager.Controllers
             ViewData["InnovationId"] = projectAssessmentReportId;
 
             return View();
+        }
+
+        private static void SetDecisionStatus(ProjectAssessmentReport? projectAssessmentReport)
+        {
+            if (projectAssessmentReport.Approvals.Count() >= 2)
+            {
+                projectAssessmentReport.Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingAllocationOfResource);
+            }
+            else
+            {
+                projectAssessmentReport.Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingAdditionalApproval);
+            }
         }
 
         private string GetCurrentUser()

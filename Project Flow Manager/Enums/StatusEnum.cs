@@ -6,8 +6,12 @@ namespace Project_Flow_Manager.Enums
     {
         [Display(Name = "New")]
         New,
-        [Display(Name = "Eligible for descision")]
-        EligibleForDescision,
+        [Display(Name = "Approved")]
+        Approved,
+        [Display(Name = "Declined")]
+        Declined,
+        [Display(Name = "Eligible for decision")]
+        EligibleForDecision,
         [Display(Name = "Awaiting further recommendations")]
         AwaitingFurtherRecommendations,
         [Display(Name = "Awaiting allocation of resourse")]
