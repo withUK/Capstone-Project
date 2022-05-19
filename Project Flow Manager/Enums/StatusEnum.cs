@@ -11,6 +11,10 @@ namespace Project_Flow_Manager.Enums
         [Display(Name = "Awaiting further recommendations")]
         AwaitingFurtherRecommendations,
         [Display(Name = "Awaiting allocation of resourse")]
-        AwaitingAllocationOfResource
+        AwaitingAllocationOfResource,
+        [Display(Name = "Awaiting additional approval")]
+        AwaitingAdditionalApproval,
+        [Display(Name = "Passed to developement")]
+        PassedToDevelopement
     }
 }

@@ -10,16 +10,13 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>
+                    <th class="col-sm-9">
                         @Html.DisplayNameFor(model => model.Title)
                     </th>
-                    <th>
+                    <th class="col-sm-2">
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Innovation)
-                    </th>
-                    <th></th>
+                    <th class="col-sm-1"></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,9 +28,6 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Innovation.Description)
                         </td>
                         <td>
                             <a asp-action="Review" asp-route-id="@item.Id">Review</a>
