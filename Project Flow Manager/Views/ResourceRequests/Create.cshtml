@@ -10,9 +10,23 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ProjectAssessmentReportId" class="control-label"></label>
+                <label asp-for="ProjectAssessmentReportId" class="form-label"></label>
                 <input asp-for="ProjectAssessmentReportId" class="form-control" />
                 <span asp-validation-for="ProjectAssessmentReportId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <fieldset>
+                    <label class="form-label" for="full-name">Technologies</label>
+                    <legend class="sr-only">Technologies</legend>
+                    @foreach(var item in ViewBag.TechnologyOptions)
+                    {
+                        var itemId = string.Concat("teamChoice", @item);
+                        <label class="block-label" for="@itemId" data-target="@itemId">
+                        <input type="checkbox" id="@itemId" name="teamChoice" value="@itemId" aria-controls="@itemId" aria-expanded="false">
+                            @item
+                        </label>
+                    }
+                </fieldset>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

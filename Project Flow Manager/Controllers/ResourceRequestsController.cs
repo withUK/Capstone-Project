@@ -12,10 +12,12 @@ namespace Project_Flow_Manager.Controllers
     public class ResourceRequestsController : Controller
     {
         private readonly InnovationManagerContext _context;
+        private readonly ProjectFlowAdministrationContext _adminContext;
 
-        public ResourceRequestsController(InnovationManagerContext context)
+        public ResourceRequestsController(InnovationManagerContext context, ProjectFlowAdministrationContext adminContext)
         {
             _context = context;
+            _adminContext = adminContext;
         }
 
         /// <summary>
@@ -63,6 +65,7 @@ namespace Project_Flow_Manager.Controllers
         public IActionResult Create()
         {
             ViewData["Title"] = "Add a new request";
+            ViewBag.TechnologyOptions = _adminContext.Technology.Any() ? _adminContext.Technology.Select(s => s.Name).ToList() : new List<string>();
             return View();
         }
 

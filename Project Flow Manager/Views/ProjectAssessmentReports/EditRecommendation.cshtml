@@ -14,17 +14,17 @@
         <form asp-action="EditRecommendation">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Details" class="control-label"></label>
+                <label asp-for="Details" class="form-label"></label>
                 <textarea asp-for="Details" rows="10" class="form-control-textarea"></textarea>
                 <span asp-validation-for="Details" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Effort.Amount" class="control-label"></label>
+                <label asp-for="Effort.Amount" class="form-label"></label>
                 <input asp-for="Effort.Amount" class="form-control" />
                 <span asp-validation-for="Effort.Amount" class="text-danger"></span>
             </div
             <div class="form-group">
-                <label asp-for="Effort.Measure" class="control-label"></label>
+                <label asp-for="Effort.Measure" class="form-label"></label>
                 <select asp-for="Effort.Measure" class="form-control">
                 @if(ViewBag.EffortMeasures != null)
                 {
