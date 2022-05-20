@@ -26,7 +26,10 @@ namespace Project_Flow_Manager.Controllers
         {
             ViewData["Title"] = "Resourcing";
             return _context.ResourceRequest != null ? 
-                          View(await _context.ResourceRequest.ToListAsync()) :
+                          View(await _context.ResourceRequest
+                            .Include(r => r.Teams)
+                            .Include(r => r.Technologies)
+                            .ToListAsync()) :
                           Problem("Entity set 'InnovationManagerContext.ResourceRequest'  is null.");
         }
 

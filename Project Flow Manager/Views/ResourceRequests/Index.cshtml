@@ -17,15 +17,32 @@
                     <th>
                         @Html.DisplayNameFor(model => model.ProjectAssessmentReportId)
                     </th>
+                    <th>
+                        Total Hours
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.Teams)
+                    </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
+                    var totalHours = item.TotalHours();
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.ProjectAssessmentReportId)
+                        </td>
+                        <td>
+                            @totalHours
+                        </td>
+                        <td>
+                            @foreach(var team in item.Teams)
+                            {
+                                @String.Concat(team.Team.Name, " for ", team.Hours, " hours");
+                                <br />
+                            }
                         </td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
