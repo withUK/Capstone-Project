@@ -1,4 +1,5 @@
 ﻿using Project_Flow_Manager_Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectFlowManagerModels
 {
@@ -15,6 +16,8 @@ namespace ProjectFlowManagerModels
         public int Id { get; set; }
         public string? Title { get; set; }
         public string Status { get; set; }
+        [Display(Name = "Submitted Date")]
+        public DateTime? CreatedDate { get; set; }
 
         public int InnovationId { get; set; }
         public virtual Innovation? Innovation { get; set; }

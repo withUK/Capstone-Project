@@ -4,26 +4,25 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p>
-    <a class="btn btn-primary btn-arrow" asp-action="Create">Create new</a>
-</p>
-
 @if (Model != null && Model.Count() > 0)
 {
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
-                    <th>
+                    <th class="col-sm-2">
                         @Html.DisplayNameFor(model => model.ProjectAssessmentReportId)
                     </th>
-                    <th>
-                        Total Hours
+                    <th class="col-sm-2">
+                        @Html.DisplayName("Total Hours")
                     </th>
-                     <th>
-                        @Html.DisplayNameFor(model => model.Teams)
+                    <th class="col-sm-2">
+                        @Html.DisplayName("Number of Teams")
                     </th>
-                    <th></th>
+                    <th class="col-sm-2">
+                        @Html.DisplayName("Number of Technologies")
+                    </th>
+                    <th class="col-sm-2"></th>
                 </tr>
             </thead>
             <tbody>
@@ -38,15 +37,13 @@
                             @totalHours
                         </td>
                         <td>
-                            @foreach(var team in item.Teams)
-                            {
-                                @String.Concat(team.Team.Name, " for ", team.Hours, " hours");
-                                <br />
-                            }
+                            @item.Teams.Count
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            @item.Technologies.Count
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                         </td>
                     </tr>
                 }

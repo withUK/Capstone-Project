@@ -30,6 +30,5 @@ namespace Project_Flow_Manager_Models
         public virtual ICollection<TeamResource>? Teams { get; set; }
         [Display(Name = "Technologies")]
         public virtual ICollection<Technology>? Technologies { get; set; }
-
     }
 }

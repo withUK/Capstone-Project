@@ -26,4 +26,6 @@ public class InnovationManagerContext : DbContext
     public DbSet<Effort>? Effort { get; set; }
 
     public DbSet<Project_Flow_Manager_Models.ResourceRequest>? ResourceRequest { get; set; }
+
+    public DbSet<Project_Flow_Manager_Models.TeamResource>? TeamResource { get; set; }
 }
