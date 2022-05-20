@@ -19,7 +19,7 @@ namespace Project_Flow_Manager_Models
             return hours;
         }
 
-        public int ProjectAssessmentId { get; set; }
+        public int? ProjectAssessmentReportId { get; set; }
         public virtual ProjectAssessmentReport ProjectAssessmentReport { get; set; }
 
         public virtual ICollection<TeamResource>? Teams { get; set; }

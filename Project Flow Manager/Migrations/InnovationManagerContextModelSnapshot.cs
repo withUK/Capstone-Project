@@ -160,10 +160,7 @@ namespace Project_Flow_Manager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ProjectAssessmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectAssessmentReportId")
+                    b.Property<int?>("ProjectAssessmentReportId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -446,9 +443,7 @@ namespace Project_Flow_Manager.Migrations
                 {
                     b.HasOne("ProjectFlowManagerModels.ProjectAssessmentReport", "ProjectAssessmentReport")
                         .WithMany()
-                        .HasForeignKey("ProjectAssessmentReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectAssessmentReportId");
 
                     b.Navigation("ProjectAssessmentReport");
                 });

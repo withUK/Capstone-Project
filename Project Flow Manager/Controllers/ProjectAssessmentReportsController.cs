@@ -30,7 +30,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Assessments";
-            ViewData["InnovationCount"] = _context.ProjectAssessmentReport
+            ViewData["ProjectAssessmentReportCount"] = _context.ProjectAssessmentReport
                 .Where(i => i.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.New)))
                 .Count();
 
