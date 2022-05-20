@@ -1,93 +1,97 @@
-﻿#nullable disable
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager_Administration.Controllers
 {
-    public class TechnologiesController : Controller
+    public class TeamsController : Controller
     {
         private readonly ProjectFlowAdministrationContext _context;
 
-        public TechnologiesController(ProjectFlowAdministrationContext context)
+        public TeamsController(ProjectFlowAdministrationContext context)
         {
             _context = context;
         }
 
-        // GET: Technologies
+        // GET: Teams
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Technologies";
-            return View(await _context.Technology.ToListAsync());
+            ViewData["Title"] = "Teams";
+            return View(await _context.Team.ToListAsync());
         }
 
-        // GET: Technologies/Details/5
+        // GET: Teams/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Team == null)
             {
                 return NotFound();
             }
 
-            var technology = await _context.Technology
+            var team = await _context.Team
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (technology == null)
+            if (team == null)
             {
                 return NotFound();
             }
 
-            return View(technology);
+            return View(team);
         }
 
-        // GET: Technologies/Create
+        // GET: Teams/Create
         public IActionResult Create()
         {
-            ViewData["Title"] = "Add a new option";
+            ViewData["Title"] = "Add a new team";
             return View();
         }
 
-        // POST: Technologies/Create
+        // POST: Teams/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Technology technology)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Team team)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(technology);
+                _context.Add(team);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Title"] = "Add a new option";
-            return View(technology);
+            ViewData["Title"] = "Add a new team";
+            return View(team);
         }
 
-        // GET: Technologies/Edit/5
+        // GET: Teams/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Team == null)
             {
                 return NotFound();
             }
 
-            var technology = await _context.Technology.FindAsync(id);
-            if (technology == null)
+            var team = await _context.Team.FindAsync(id);
+            if (team == null)
             {
                 return NotFound();
             }
-            ViewData["Title"] = "Edit option";
-            return View(technology);
+            ViewData["Title"] = "Edit the team name";
+            return View(team);
         }
 
-        // POST: Technologies/Edit/5
+        // POST: Teams/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Technology technology)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Team team)
         {
-            if (id != technology.Id)
+            if (id != team.Id)
             {
                 return NotFound();
             }
@@ -96,12 +100,12 @@ namespace Project_Flow_Manager_Administration.Controllers
             {
                 try
                 {
-                    _context.Update(technology);
+                    _context.Update(team);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TechnologyExists(technology.Id))
+                    if (!TeamExists(team.Id))
                     {
                         return NotFound();
                     }
@@ -112,43 +116,50 @@ namespace Project_Flow_Manager_Administration.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Title"] = "Edit option";
-            return View(technology);
+            ViewData["Title"] = "Edit the team name";
+            return View(team);
         }
 
-        // GET: Technologies/Delete/5
+        // GET: Teams/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Team == null)
             {
                 return NotFound();
             }
 
-            var technology = await _context.Technology
+            var team = await _context.Team
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (technology == null)
+            if (team == null)
             {
                 return NotFound();
             }
 
-            ViewData["Title"] = "Confirm Deletion";
-            return View(technology);
+            return View(team);
         }
 
-        // POST: Technologies/Delete/5
+        // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var technology = await _context.Technology.FindAsync(id);
-            _context.Technology.Remove(technology);
+            if (_context.Team == null)
+            {
+                return Problem("Entity set 'ProjectFlowAdministrationContext.Team'  is null.");
+            }
+            var team = await _context.Team.FindAsync(id);
+            if (team != null)
+            {
+                _context.Team.Remove(team);
+            }
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TechnologyExists(int id)
+        private bool TeamExists(int id)
         {
-            return _context.Technology.Any(e => e.Id == id);
+          return (_context.Team?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

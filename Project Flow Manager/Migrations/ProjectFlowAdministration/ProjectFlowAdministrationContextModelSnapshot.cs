@@ -2,18 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Project_Flow_Manager_Administration.Migrations
+namespace Project_Flow_Manager.Migrations.ProjectFlowAdministration
 {
     [DbContext(typeof(ProjectFlowAdministrationContext))]
-    [Migration("20220511190827_InitialCreate-EffortMeasure")]
-    partial class InitialCreateEffortMeasure
+    partial class ProjectFlowAdministrationContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

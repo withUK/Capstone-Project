@@ -2,16 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Project_Flow_Manager_Administration.Migrations
+namespace Project_Flow_Manager.Migrations.ProjectFlowAdministration
 {
     [DbContext(typeof(ProjectFlowAdministrationContext))]
-    partial class ProjectFlowAdministrationContextModelSnapshot : ModelSnapshot
+    [Migration("20220520001046_Initial-TeamsModel")]
+    partial class InitialTeamsModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,23 +71,6 @@ namespace Project_Flow_Manager_Administration.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Status");
-                });
-
-            modelBuilder.Entity("Project_Flow_Manager_Models.Team", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Team");
                 });
 
             modelBuilder.Entity("Project_Flow_Manager_Models.Technology", b =>
