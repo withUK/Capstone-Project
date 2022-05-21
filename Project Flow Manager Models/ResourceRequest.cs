@@ -21,6 +21,9 @@ namespace Project_Flow_Manager_Models
             return hours;
         }
 
+        [Display(Name = "Technologies")]
+        public ICollection<Technology>? Technologies { get; set; }
+
         [Display(Name = "Project Assessment Report Id")]
         public int? ProjectAssessmentReportId { get; set; }
         [Display(Name = "Project Assessment Report")]
@@ -28,7 +31,5 @@ namespace Project_Flow_Manager_Models
 
         [Display(Name = "Teams")]
         public virtual ICollection<TeamResource>? Teams { get; set; }
-        [Display(Name = "Technologies")]
-        public virtual ICollection<Technology>? Technologies { get; set; }
     }
 }

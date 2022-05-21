@@ -11,7 +11,7 @@
            <div class="form-group">
                 <label asp-for="Team" class="form-label"></label>
                 <select asp-for="Team" class="form-control">
-                    <option value = null>Select a team...</option> 
+                    <option value = null>Select an option...</option> 
                     @if(ViewBag.TeamsOptions != null)
                     {
                         @foreach(var item in ViewBag.TeamsOptions)
@@ -34,8 +34,3 @@
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
