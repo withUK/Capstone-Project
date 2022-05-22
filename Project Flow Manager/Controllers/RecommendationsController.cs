@@ -48,6 +48,7 @@ namespace Project_Flow_Manager.Controllers
 
             var recommendation = await _context.Recommendation
                 .Include(_r => _r.Effort)
+                .Include(r => r.ProcessSteps)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (recommendation == null)
             {
@@ -195,6 +196,153 @@ namespace Project_Flow_Manager.Controllers
             _context.Recommendation.Remove(recommendation);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recommendationId"></param>
+        /// <returns></returns>
+        public IActionResult ProcessSteps(int recommendationId)
+        {
+            var recommendation = _context.Recommendation.Where(i => i.Id == recommendationId).Include(i => i.ProcessSteps).FirstOrDefault();
+
+            if (recommendation == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = string.Concat("Process Steps for recommendation Id : ", recommendation.Id);
+
+            return View(recommendation);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="processStep"></param>
+        /// <param name="recommendationId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddProcessStep([Bind("Value,OrderPosition")] ProcessStep processStep, int recommendationId)
+        {
+            var recommendation = _context.Recommendation.Where(i => i.Id == recommendationId).Include(i => i.ProcessSteps).FirstOrDefault();
+
+            if (recommendation == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (recommendation.ProcessSteps == null)
+                {
+                    recommendation.ProcessSteps = new List<ProcessStep>();
+                }
+
+                recommendation.ProcessSteps.Add(processStep);
+                _context.Recommendation.Update(recommendation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = recommendation.Id });
+            }
+
+            ViewData["Title"] = string.Concat("Process Step for recommendation Id : ", recommendation.Id);
+            ViewData["RecommendationId"] = recommendation.Id;
+            return View(recommendation.Id);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="recommendationId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> EditProcessStep(int id, int recommendationId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var step = await _context.ProcessStep.FindAsync(id);
+            if (step == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Edit a process step";
+            ViewData["RecommendationId"] = recommendationId;
+            return View(step);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="processStep"></param>
+        /// <param name="recommendationId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProcessStep([Bind("Id,Value,OrderPosition")] ProcessStep processStep, int recommendationId)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.ProcessStep.Update(processStep);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = recommendationId });
+            }
+
+            ViewData["Title"] = "Edit a process step";
+            ViewData["RecommendationId"] = recommendationId;
+            return View(recommendationId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="innovationId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> DeleteProcessStep(int? id, int recommendationId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var processStep = await _context.ProcessStep.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (processStep == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Confirm Deletion";
+            ViewData["RecommendationId"] = recommendationId;
+            return View(processStep);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="recommendationId"></param>
+        /// <returns></returns>
+        [HttpPost, ActionName("DeleteProcessStep")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProcessStepConfirmed(int id, int recommendationId)
+        {
+            var recommendation = _context.Recommendation.Where(i => i.Id == recommendationId).Include(i => i.ProcessSteps).FirstOrDefault();
+            ViewData["Title"] = string.Concat("Process Steps for ", recommendation.Id);
+
+            var processStep = await _context.ProcessStep.FirstOrDefaultAsync(m => m.Id == id);
+            _context.ProcessStep.Remove(processStep);
+            await _context.SaveChangesAsync();
+            ViewData["ActionMessage"] = "Process step has been removed";
+            ViewData["ActionResult"] = "success";
+
+            return RedirectToAction(nameof(Details), new { id = recommendationId });
         }
 
         /// <summary>
