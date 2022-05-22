@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Project_Flow_Manager_Models.ResourceRequest>
+
+<a asp-action="Index" asp-controller="Home" class="link-back">Back</a>
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.ProjectAssessmentReportId)
+                    </th>
+                    <th class="col-sm-2">
+                        @Html.DisplayName("Total Hours")
+                    </th>
+                    <th class="col-sm-2">
+                        @Html.DisplayName("Number of Teams")
+                    </th>
+                    <th class="col-sm-2">
+                        @Html.DisplayName("Number of Technologies")
+                    </th>
+                    <th class="col-sm-2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var totalHours = item.TotalHours();
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProjectAssessmentReportId)
+                        </td>
+                        <td>
+                            @totalHours
+                        </td>
+                        <td>
+                            @item.Teams.Count
+                        </td>
+                        <td>
+                            @item.Technologies.Count
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div role="note" aria-label="Information" class="text-highlight  text-highlight--blue">
+        <p>Currently no resourcing requests.</p>
+    </div>
+}

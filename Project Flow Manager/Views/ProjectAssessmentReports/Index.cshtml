@@ -4,13 +4,6 @@
 
 <h1>@ViewData["Title"]</h1>
 
-@if (ViewBag.InnovationCount > 0)
-{
-    <p>
-        <a class="btn btn-primary btn-arrow" asp-action="Create">Create new</a>
-    </p>
-}
-
 @if (Model != null && Model.Count() > 0)
 {
     <div class="table-responsive">

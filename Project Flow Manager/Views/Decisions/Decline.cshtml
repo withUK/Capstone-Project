@@ -1,6 +1,6 @@
 ﻿@model ProjectFlowManagerModels.Approval
 
-<a asp-action="Index" asp-controller="DecisionsApprovals" class="link-back">Back</a>
+<a asp-action="Index" asp-controller="Decisions" class="link-back">Back</a>
 
 <h1>Decisions</h1>
 <h2>@ViewData["Title"]</h2>
@@ -10,7 +10,7 @@
         <form asp-action="Decline">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Reason" class="control-label"></label>
+                <label asp-for="Reason" class="form-label"></label>
                 <textarea asp-for="Reason" rows="5" class="form-control-textarea"></textarea>
                 <span asp-validation-for="Reason" class="text-danger"></span>
             </div>

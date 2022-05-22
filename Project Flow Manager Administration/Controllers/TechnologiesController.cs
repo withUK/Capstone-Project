@@ -59,6 +59,7 @@ namespace Project_Flow_Manager_Administration.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Title"] = "Add a new option";
             return View(technology);
         }
 
@@ -111,6 +112,7 @@ namespace Project_Flow_Manager_Administration.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Title"] = "Edit option";
             return View(technology);
         }
 

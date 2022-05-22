@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager.Enums;
 using Project_Flow_Manager.Helpers;
+using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
@@ -123,6 +124,14 @@ namespace Project_Flow_Manager.Controllers
                 projectAssessmentReport.Approvals.Add(approval);
                 SetDecisionStatus(projectAssessmentReport);
 
+                var approvalCount = projectAssessmentReport.Approvals.Where(a => a.Outcome == EnumHelper.GetDisplayName(StatusEnum.Approved)).Count();
+                
+                if (approvalCount >= 2)
+                {
+                    var resouceRequest = new ResourceRequest() { ProjectAssessmentReport = projectAssessmentReport, Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingAllocationOfResource)};
+                    _context.ResourceRequest.Add(resouceRequest);
+                }
+
                 _context.ProjectAssessmentReport.Update(projectAssessmentReport);
 
                 await _context.SaveChangesAsync();
@@ -148,7 +157,7 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = "Decline Submission";
-            ViewData["InnovationId"] = id;
+            ViewData["ProjectAssessmentReportId"] = id;
 
             return View();
         }
@@ -194,7 +203,7 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = "Decline Approval";
-            ViewData["InnovationId"] = projectAssessmentReportId;
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReportId;
 
             return View();
         }

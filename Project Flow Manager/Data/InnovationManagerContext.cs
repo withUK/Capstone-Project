@@ -24,4 +24,10 @@ public class InnovationManagerContext : DbContext
     public DbSet<Recommendation> Recommendation { get; set; }
 
     public DbSet<Effort>? Effort { get; set; }
+
+    public DbSet<ResourceRequest>? ResourceRequest { get; set; }
+
+    public DbSet<TeamResource>? TeamResource { get; set; }
+
+    public DbSet<Project_Flow_Manager_Models.TechnologyResource>? TechnologyResource { get; set; }
 }

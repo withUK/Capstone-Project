@@ -1,0 +1,73 @@
+﻿@model Project_Flow_Manager_Models.ResourceRequest
+
+<a asp-action="Index" asp-controller="ResourceRequests" class="link-back">Back</a>
+
+<h1>Resourcing</h1>
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjectAssessmentReportId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectAssessmentReportId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjectAssessmentReport.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectAssessmentReport.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Teams)
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-action="AddTeamResource" asp-route-resourceRequestId="@Model.Id"><i class="fa-solid fa-plus"></i></a>
+        </dd>
+        @if (Model.Teams.Count() > 0)
+        {
+            @foreach (var team in Model.Teams)
+            {
+                <div class="row">
+                    <dd class = "col-sm-2"></dd>
+                    <dd class = "col-sm-3">
+                        @string.Concat(team.Team," for ",team.Hours, " hours")
+                    </dd>
+                    <dd class = "col-sm-2">
+                        <a asp-action="EditTeamResource" asp-route-id="@team.Id" asp-route-resourceRequestId="@Model.Id"><i class="fa-solid fa-pen-to-square"></i></a>|
+                        <a asp-action="DeleteTeamResource" asp-route-id="@team.Id" asp-route-resourceRequestId="@Model.Id"><i class="fa-solid fa-trash-can"></i></a>
+                    </dd>
+                    <dd class = "col-sm-5"></dd>
+                </div>
+            }
+        }
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Technologies)
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-action="AddTechnologyResource" asp-route-resourceRequestId="@Model.Id"><i class="fa-solid fa-plus"></i></a>
+        </dd>
+        @if (Model.Technologies.Count() > 0)
+        {
+            @foreach (var tech in Model.Technologies)
+            {
+                <div class="row">
+                    <dd class = "col-sm-2"></dd>
+                    <dd class = "col-sm-3">
+                        @tech.ProductName
+                    </dd>
+                    <dd class = "col-sm-2">
+                        <a asp-action="DeleteTechnologyResource" asp-route-id="@tech.Id" asp-route-resourceRequestId="@Model.Id"><i class="fa-solid fa-trash-can"></i></a>
+                    </dd>
+                    <dd class = "col-sm-5"></dd>
+                </div>
+            }
+        }
+    </dl>
+</div>
+@if (Model.Technologies.Count > 0 && Model.Teams.Count > 0)
+{
+    <a class="btn btn-primary" asp-action="ConfirmResourceRequest" asp-route-id="@Model.Id" asp-route-resourceRequestId="@Model.Id">Confirm</a>
+}

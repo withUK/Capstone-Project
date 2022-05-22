@@ -10,6 +10,7 @@ namespace Project_Flow_Manager.Helpers
         public static ProjectAssessmentReport? GetProjectAssessmentReport(int? projectAssessmentReportId, InnovationManagerContext dbContext)
         {
             return dbContext.ProjectAssessmentReport
+                .Include(p => p.Approvals)
                 .Include(p => p.Recommendations)
                 .ThenInclude(r => r.Effort)
                 .Include(p => p.Innovation)

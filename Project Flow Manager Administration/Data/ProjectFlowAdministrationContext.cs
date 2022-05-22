@@ -16,4 +16,6 @@ public class ProjectFlowAdministrationContext : DbContext
     public DbSet<ProcessType> ProcessType { get; set; }
 
     public DbSet<EffortMeasure>? EffortMeasure { get; set; }
+
+    public DbSet<Project_Flow_Manager_Models.Team>? Team { get; set; }
 }

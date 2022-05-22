@@ -71,6 +71,23 @@ namespace Project_Flow_Manager_Administration.Migrations
                     b.ToTable("Status");
                 });
 
+            modelBuilder.Entity("Project_Flow_Manager_Models.Team", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Team");
+                });
+
             modelBuilder.Entity("Project_Flow_Manager_Models.Technology", b =>
                 {
                     b.Property<int>("Id")
