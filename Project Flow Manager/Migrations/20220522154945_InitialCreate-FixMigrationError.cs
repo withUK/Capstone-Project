@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Project_Flow_Manager.Migrations
 {
-    public partial class RebuildDatabase : Migration
+    public partial class InitialCreateFixMigrationError : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,6 +76,7 @@ namespace Project_Flow_Manager.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     InnovationId = table.Column<int>(type: "int", nullable: false),
                     ChosenRecommendationId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -168,8 +169,8 @@ namespace Project_Flow_Manager.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectAssessmentId = table.Column<int>(type: "int", nullable: false),
-                    ProjectAssessmentReportId = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProjectAssessmentReportId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -178,8 +179,7 @@ namespace Project_Flow_Manager.Migrations
                         name: "FK_ResourceRequest_ProjectAssessmentReport_ProjectAssessmentReportId",
                         column: x => x.ProjectAssessmentReportId,
                         principalTable: "ProjectAssessmentReport",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -264,8 +264,7 @@ namespace Project_Flow_Manager.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InnovationId = table.Column<int>(type: "int", nullable: true),
-                    RecommendationId = table.Column<int>(type: "int", nullable: true),
-                    ResourceRequestId = table.Column<int>(type: "int", nullable: true)
+                    RecommendationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -280,11 +279,6 @@ namespace Project_Flow_Manager.Migrations
                         column: x => x.RecommendationId,
                         principalTable: "Recommendation",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Technology_ResourceRequest_ResourceRequestId",
-                        column: x => x.ResourceRequestId,
-                        principalTable: "ResourceRequest",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -293,7 +287,7 @@ namespace Project_Flow_Manager.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    Team = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Hours = table.Column<int>(type: "int", nullable: false),
                     ResourceRequestId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -305,12 +299,25 @@ namespace Project_Flow_Manager.Migrations
                         column: x => x.ResourceRequestId,
                         principalTable: "ResourceRequest",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TechnologyResource",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResourceRequestId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TechnologyResource", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamResource_Team_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "Team",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_TechnologyResource_ResourceRequest_ResourceRequestId",
+                        column: x => x.ResourceRequestId,
+                        principalTable: "ResourceRequest",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -389,11 +396,6 @@ namespace Project_Flow_Manager.Migrations
                 column: "ResourceRequestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamResource_TeamId",
-                table: "TeamResource",
-                column: "TeamId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Technology_InnovationId",
                 table: "Technology",
                 column: "InnovationId");
@@ -404,8 +406,8 @@ namespace Project_Flow_Manager.Migrations
                 column: "RecommendationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Technology_ResourceRequestId",
-                table: "Technology",
+                name: "IX_TechnologyResource_ResourceRequestId",
+                table: "TechnologyResource",
                 column: "ResourceRequestId");
 
             migrationBuilder.AddForeignKey(
@@ -435,19 +437,22 @@ namespace Project_Flow_Manager.Migrations
                 name: "Tag");
 
             migrationBuilder.DropTable(
+                name: "Team");
+
+            migrationBuilder.DropTable(
                 name: "TeamResource");
 
             migrationBuilder.DropTable(
                 name: "Technology");
 
             migrationBuilder.DropTable(
-                name: "Team");
-
-            migrationBuilder.DropTable(
-                name: "ResourceRequest");
+                name: "TechnologyResource");
 
             migrationBuilder.DropTable(
                 name: "Recommendation");
+
+            migrationBuilder.DropTable(
+                name: "ResourceRequest");
 
             migrationBuilder.DropTable(
                 name: "Effort");
