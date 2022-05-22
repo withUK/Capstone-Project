@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Project_Flow_Manager.Enums;
+using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 
 namespace Project_Flow_Manager.Controllers
@@ -29,6 +31,7 @@ namespace Project_Flow_Manager.Controllers
             ViewData["Title"] = "Resourcing";
             return _context.ResourceRequest != null ? 
                           View(await _context.ResourceRequest
+                            .Include(r => r.ProjectAssessmentReport)
                             .Include(r => r.Teams)
                             .Include(r => r.Technologies)
                             .ToListAsync()) :
@@ -88,66 +91,6 @@ namespace Project_Flow_Manager.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["Title"] = "Add a new request";
-            return View(resourceRequest);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.ResourceRequest == null)
-            {
-                return NotFound();
-            }
-
-            var resourceRequest = await _context.ResourceRequest.FindAsync(id);
-            if (resourceRequest == null)
-            {
-                return NotFound();
-            }
-            ViewData["Title"] = "Edit an idea";
-            return View(resourceRequest);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="resourceRequest"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProjectAssessmentId")] ResourceRequest resourceRequest)
-        {
-            if (id != resourceRequest.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(resourceRequest);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ResourceRequestExists(resourceRequest.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["Title"] = "Edit an idea";
             return View(resourceRequest);
         }
 
@@ -232,9 +175,8 @@ namespace Project_Flow_Manager.Controllers
                 return RedirectToAction(nameof(Details), new { id = resourceRequest.Id });
             }
 
-            ViewData["Title"] = string.Concat("Team resource for : ", resourceRequestId);
+            ViewData["Title"] = string.Concat("Team resource for Request ID : ", resourceRequestId);
             ViewData["ResourceRequestId"] = resourceRequest.Id;
-            ViewBag.TeamsOptions = _adminContext.Team.Any() ? _adminContext.Technology.Select(s => s.Name).ToList() : new List<string>(); 
             
             return View(resourceRequest.Id);
         }
@@ -254,8 +196,7 @@ namespace Project_Flow_Manager.Controllers
 
             ViewData["Title"] = "Edit this team resource";
             ViewData["ResourceRequestId"] = resourceRequestId;
-            ViewBag.TeamsOptions = _adminContext.Team.Any() ? _adminContext.Team.Select(s => s.Name).ToList() : new List<string>();
-
+           
             return View(team);
         }
 
@@ -310,6 +251,91 @@ namespace Project_Flow_Manager.Controllers
             ViewData["ActionResult"] = "success";
 
             return RedirectToAction(nameof(Details), new { id = resourceRequestId });
+        }
+
+        public async Task<IActionResult> AddTechnologyResource(int resourceRequestId)
+        {
+            var resourceRequest = _context.ResourceRequest.Where(i => i.Id == resourceRequestId).Include(i => i.Teams).FirstOrDefault();
+
+            if (resourceRequest == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = string.Concat("Technology resource for Request ID : ", resourceRequestId);
+            ViewData["ResourceRequestId"] = resourceRequest.Id;
+            ViewBag.TechnologyOptions = _adminContext.Technology.Any() ? _adminContext.Technology.Select(s => s.Name).ToList() : new List<string>();
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddTechnologyResource([Bind("ProductName")] TechnologyResource technologyResource, int resourceRequestId)
+        {
+            var resourceRequest = _context.ResourceRequest.Where(i => i.Id == resourceRequestId).Include(i => i.Teams).FirstOrDefault();
+
+            if (resourceRequest == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                resourceRequest.Technologies.Add(technologyResource);
+                _context.ResourceRequest.Update(resourceRequest);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = resourceRequest.Id });
+            }
+
+            ViewData["Title"] = string.Concat("Technology resource for Request ID : ", resourceRequestId);
+            ViewData["ResourceRequestId"] = resourceRequest.Id;
+            ViewBag.TechnologyOptions = _adminContext.Technology.Any() ? _adminContext.Technology.Select(s => s.Name).ToList() : new List<string>();
+
+            return View(resourceRequest.Id);
+        }
+
+        public async Task<IActionResult> DeleteTechnologyResource(int? id, int resourceRequestId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var team = await _context.TechnologyResource.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = "Confirm Deletion";
+            ViewData["ResourceRequestId"] = resourceRequestId;
+            return View(team);
+        }
+
+        [HttpPost, ActionName("DeleteTechnologyResource")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTechnologyResourceConfirmed(int id, int resourceRequestId)
+        {
+            var resourceRequest = _context.ResourceRequest.Where(i => i.Id == resourceRequestId).FirstOrDefault();
+            ViewData["Title"] = string.Concat("Technology resource for Request ID : ", resourceRequest.Id);
+
+            var technologyResource = await _context.TechnologyResource.FirstOrDefaultAsync(m => m.Id == id);
+            _context.TechnologyResource.Remove(technologyResource);
+            await _context.SaveChangesAsync();
+            ViewData["ActionMessage"] = "Technology resource has been removed";
+            ViewData["ActionResult"] = "success";
+
+            return RedirectToAction(nameof(Details), new { id = resourceRequestId });
+        }
+
+        public IActionResult ConfirmResourceRequest(int? id)
+        {
+            var resourceRequest = _context.ResourceRequest.Where(i => i.Id == id).FirstOrDefault();
+            resourceRequest.Status = EnumHelper.GetDisplayName(StatusEnum.PassedToDevelopement);
+
+            return RedirectToAction(nameof(Index));
         }
 
         /// <summary>

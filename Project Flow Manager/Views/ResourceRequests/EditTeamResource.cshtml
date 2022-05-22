@@ -1,6 +1,10 @@
 ﻿@model Project_Flow_Manager_Models.TeamResource
 
-<a asp-action="Index" asp-controller="ResourceRequests" class="link-back">Back</a>
+@{
+    var resourceRequestId = @ViewData["ResourceRequestId"];
+}
+
+<a asp-action="Details" asp-controller="ResourceRequests" asp-route-id="@resourceRequestId" class="link-back">Back</a>
 
 <h1>Resourcing</h1>
 <h2>@ViewData["Title"]</h2>
@@ -12,17 +16,8 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Team" class="form-label"></label>
-                <select asp-for="Team" class="form-control">
-                    <option value = null>Select a team...</option> 
-                    @if(ViewBag.TeamsOptions != null)
-                    {
-                        @foreach(var item in ViewBag.TeamsOptions)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    }
-                </select>
-                <span asp-validation-for="Team" class="text-danger"></span>
+                <input type="hidden" asp-for="Team" value="@Model.Team" />
+                @Html.DisplayFor(m => m.Team)
             </div>
             <div class="form-group">
                 <label asp-for="Hours" class="form-label"></label>
@@ -30,7 +25,7 @@
                 <span asp-validation-for="Hours" class="text-danger"></span>
             </div>
             <input type="hidden" id="resourceRequestId" name="resourceRequestId" value=@ViewData["ResourceRequestId"] />
-            <div class="form-group">
+           <div class="form-group">
                 <input type="submit" value="Update" class="btn btn-primary" />
             </div>
         </form>

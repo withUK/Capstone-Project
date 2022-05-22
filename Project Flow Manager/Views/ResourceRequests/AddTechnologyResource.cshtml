@@ -1,4 +1,4 @@
-﻿@model Project_Flow_Manager_Models.TeamResource
+﻿@model Project_Flow_Manager_Models.TechnologyResource
 
 @{
     var resourceRequestId = @ViewData["ResourceRequestId"];
@@ -11,25 +11,21 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddTeamResource">
-           <div class="form-group">
-                <label asp-for="Team" class="form-label"></label>
-                <select asp-for="Team" class="form-control">
+        <form asp-action="AddTechnologyResource">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductName" class="form-label"></label>
+                <select asp-for="ProductName" class="form-control">
                     <option value = null>Select an option...</option> 
-                    @if(ViewBag.TeamsOptions != null)
+                    @if(ViewBag.TechnologyOptions != null)
                     {
-                        @foreach(var item in ViewBag.TeamsOptions)
+                        @foreach(var item in ViewBag.TechnologyOptions)
                         {
                             <option value="@item">@item</option>
                         }
                     }
                 </select>
-                <span asp-validation-for="Team" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hours" class="form-label"></label>
-                <input asp-for="Hours" class="form-control" />
-                <span asp-validation-for="Hours" class="text-danger"></span>
+                <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
             <input type="hidden" id="resourceRequestId" name="resourceRequestId" value="@resourceRequestId" />
             <div class="form-group">

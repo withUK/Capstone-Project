@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Project_Flow_Manager.Migrations
 {
     [DbContext(typeof(InnovationManagerContext))]
-    partial class InnovationManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220521215449_UpdateModel-TechnologyResource")]
+    partial class UpdateModelTechnologyResource
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,10 +164,6 @@ namespace Project_Flow_Manager.Migrations
 
                     b.Property<int?>("ProjectAssessmentReportId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

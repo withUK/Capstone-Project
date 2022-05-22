@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Project_Flow_Manager.Migrations
 {
     [DbContext(typeof(InnovationManagerContext))]
-    partial class InnovationManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220521205428_UpdateModel-ResourceRequest")]
+    partial class UpdateModelResourceRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,10 +165,6 @@ namespace Project_Flow_Manager.Migrations
                     b.Property<int?>("ProjectAssessmentReportId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectAssessmentReportId");
@@ -261,34 +259,18 @@ namespace Project_Flow_Manager.Migrations
                     b.Property<int?>("RecommendationId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ResourceRequestId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("InnovationId");
 
                     b.HasIndex("RecommendationId");
 
-                    b.ToTable("Technology");
-                });
-
-            modelBuilder.Entity("Project_Flow_Manager_Models.TechnologyResource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ResourceRequestId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("ResourceRequestId");
 
-                    b.ToTable("TechnologyResource");
+                    b.ToTable("Technology");
                 });
 
             modelBuilder.Entity("ProjectFlowManagerModels.Approval", b =>
@@ -500,10 +482,7 @@ namespace Project_Flow_Manager.Migrations
                     b.HasOne("Project_Flow_Manager_Models.Recommendation", null)
                         .WithMany("Technologies")
                         .HasForeignKey("RecommendationId");
-                });
 
-            modelBuilder.Entity("Project_Flow_Manager_Models.TechnologyResource", b =>
-                {
                     b.HasOne("Project_Flow_Manager_Models.ResourceRequest", null)
                         .WithMany("Technologies")
                         .HasForeignKey("ResourceRequestId");

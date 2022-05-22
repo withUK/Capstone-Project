@@ -124,9 +124,11 @@ namespace Project_Flow_Manager.Controllers
                 projectAssessmentReport.Approvals.Add(approval);
                 SetDecisionStatus(projectAssessmentReport);
 
-                if (projectAssessmentReport.Approvals.Count >= 2)
+                var approvalCount = projectAssessmentReport.Approvals.Where(a => a.Outcome == EnumHelper.GetDisplayName(StatusEnum.Approved)).Count();
+                
+                if (approvalCount >= 2)
                 {
-                    var resouceRequest = new ResourceRequest() { ProjectAssessmentReport = projectAssessmentReport };
+                    var resouceRequest = new ResourceRequest() { ProjectAssessmentReport = projectAssessmentReport, Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingAllocationOfResource)};
                     _context.ResourceRequest.Add(resouceRequest);
                 }
 
