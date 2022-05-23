@@ -74,8 +74,8 @@ namespace Project_Flow_Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
         {
-            innovation.SubmittedDate = DateTime.Now;
-            innovation.SubmittedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+            innovation.Created = DateTime.Now;
+            innovation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
             innovation.ProcessSteps = new List<ProcessStep>();
 
             if (ModelState.IsValid)

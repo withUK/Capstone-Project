@@ -30,7 +30,6 @@ namespace Project_Flow_Manager.Controllers
             ViewData["AssessmentCount"] = _context.ProjectAssessmentReport.Count();
             return View(await _context.Recommendation
                 .Include(r => r.Effort)
-                .Include(r => r.ProjectAssessmentReport)
                 .ToListAsync());
         }
 

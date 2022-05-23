@@ -4,13 +4,6 @@
 
 <h1>@ViewData["Title"]</h1>
 
-@if(ViewBag.AssessmentCount > 0)
-{
-    <p>
-        <a class="btn btn-primary btn-arrow" asp-action="Create">Create new</a>
-    </p>
-}
-
 @if (Model != null && Model.Count() > 0)
 {
     <div class="table-responsive">
@@ -30,7 +23,7 @@
                         @Html.DisplayNameFor(model => model.CreatedBy)
                     </th>
                     <th class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.CreatedDate)
+                        @Html.DisplayNameFor(model => model.Created)
                     </th>
                     <th class="col-sm-1"></th>
                 </tr>
@@ -39,9 +32,6 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProjectAssessmentReport.Id)
-                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Details)
                         </td>
@@ -52,7 +42,7 @@
                             @Html.DisplayFor(modelItem => item.CreatedBy)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CreatedDate)
+                            @Html.DisplayFor(modelItem => item.Created)
                         </td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

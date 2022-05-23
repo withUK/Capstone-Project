@@ -1,6 +1,10 @@
 ﻿@model Project_Flow_Manager_Models.Recommendation
 
-<a asp-action="Details" asp-controller="ProjectAssessmentReports"asp-route-id=@Model.ProjectAssessmentReportId class="link-back">Back</a>
+@{
+    var projectAssessmentReportId = ViewData["ProjectAssessmentReportId"];
+}
+
+<a asp-action="Details" asp-controller="ProjectAssessmentReports" asp-route-id="@projectAssessmentReportId" class="link-back">Back</a>
 
 <h1>Recommendations</h1>
 <h2>@ViewData["Title"]</h2>
@@ -29,16 +33,16 @@
             @Html.DisplayFor(model => model.CreatedBy)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            @Html.DisplayNameFor(model => model.Created)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
+            @Html.DisplayFor(model => model.Created)
         </dd>
     </dl>
     
     <form asp-action="DeleteRecommendation">
         <input type="hidden" asp-for="Id" />
-        <input type="hidden" id="innovationId" name="innovationId" value=@ViewData["ProjectAssessmentReportId"] />
+        <input type="hidden" id="projectAssessmentReportId" name="projectAssessmentReportId" value=@ViewData["ProjectAssessmentReportId"] />
         <input type="submit" value="Delete" class="btn btn-danger" />
     </form>
 </div>

@@ -10,10 +10,6 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ProjectAssessmentReportId" class="form-label"></label>
-                <select asp-for="ProjectAssessmentReportId" class="form-control" asp-items="ViewBag.AssessmentId"></select>
-            </div>
-            <div class="form-group">
                 <label asp-for="Details" class="form-label"></label>
                 <textarea asp-for="Details" rows="10" class="form-control-textarea"></textarea>
                 <span asp-validation-for="Details" class="text-danger"></span>

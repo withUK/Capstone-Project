@@ -216,7 +216,7 @@ namespace Project_Flow_Manager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
+        public async Task<IActionResult> AddRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,Created,Status")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
         {
             var projectAssessmentReport = DatabaseHelper.GetProjectAssessmentReport(projectAssessmentReportId, _context);
 
@@ -228,7 +228,7 @@ namespace Project_Flow_Manager.Controllers
             if (ModelState.IsValid)
             {
                 recommendation.Effort = effort;
-                recommendation.CreatedDate = DateTime.Now;
+                recommendation.Created = DateTime.Now;
                 recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
 
                 projectAssessmentReport.Recommendations.Add(recommendation);
@@ -252,6 +252,8 @@ namespace Project_Flow_Manager.Controllers
         /// <returns></returns>
         public async Task<IActionResult> RecommendationDetails(int? id)
         {
+            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(r => r.Recommendations.Any(x => x.Id == id)).FirstOrDefault();
+
             if (id == null)
             {
                 return NotFound();
@@ -266,6 +268,7 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = string.Concat("Details of recommendation : ", recommendation.Id);
+            ViewData["ProjectAssessmentReportId"] = projectAssessmentReport.Id;
             return View(recommendation);
         }
 
@@ -302,7 +305,7 @@ namespace Project_Flow_Manager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,CreatedDate")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
+        public async Task<IActionResult> EditRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,Created")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
         {
             if (ModelState.IsValid)
             {

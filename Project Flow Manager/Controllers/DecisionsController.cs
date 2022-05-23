@@ -61,9 +61,10 @@ namespace Project_Flow_Manager.Controllers
         /// <returns></returns>
         public async Task<IActionResult> SelectRecommendation(int id)
         {
-            var choice = _context.Recommendation.Where(r => r.Id == id).Include(r => r.ProjectAssessmentReport).FirstOrDefault();
+            var choice = _context.Recommendation.Where(r => r.Id == id).FirstOrDefault();
+            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(r => r.Recommendations.Any(x => x.Id == id)).FirstOrDefault();
 
-            var projectAssessmentReport = choice.ProjectAssessmentReport;
+            //var projectAssessmentReport = choice.ProjectAssessmentReport;
             projectAssessmentReport.ChosenRecommendationId = id;
 
             _context.ProjectAssessmentReport.Update(projectAssessmentReport);
