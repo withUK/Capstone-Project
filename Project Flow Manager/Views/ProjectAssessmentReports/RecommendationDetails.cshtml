@@ -6,7 +6,7 @@
 
 <a asp-action="Details" asp-controller="ProjectAssessmentReports" asp-route-id="@projectAssessmentReportId" class="link-back">Back</a>
 
-<h1>Recommendations</h1>
+<h1>Assessments</h1>
 <h2>@ViewData["Title"]</h2>
 
 <div>
@@ -33,5 +33,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-success">Edit</a>
+    <a asp-action="EditRecommendation" asp-route-id="@Model?.Id" class="btn btn-success">Edit</a>
 </div>

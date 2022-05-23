@@ -285,7 +285,7 @@ namespace Project_Flow_Manager.Controllers
                 return NotFound();
             }
 
-            var recommendation = await _context.Recommendation.FindAsync(id);
+            var recommendation = await _context.Recommendation.Include(r => r.Effort).Where(r => r.Id == id).FirstAsync();
             if (recommendation == null)
             {
                 return NotFound();
@@ -293,6 +293,7 @@ namespace Project_Flow_Manager.Controllers
 
             ViewData["Title"] = "Edit a recommendation";
             ViewData["ProjectAssessmentReportId"] = projectAssessmentReportId;
+            ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
             return View(recommendation);
         }
 
@@ -305,10 +306,11 @@ namespace Project_Flow_Manager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditRecommendation([Bind("Id,Details,Effort.Amount,Effort.Measure,CreatedBy,Created")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
+        public async Task<IActionResult> EditRecommendation([Bind("Id,Details,Effort.Id,Effort.Amount,Effort.Measure,CreatedBy,Created,Status")] Recommendation recommendation, Effort effort, int projectAssessmentReportId)
         {
             if (ModelState.IsValid)
             {
+                _context.Effort.Update(effort);
                 _context.Recommendation.Update(recommendation);
                 _context.Effort.Update(effort);
                 await _context.SaveChangesAsync();
@@ -317,6 +319,7 @@ namespace Project_Flow_Manager.Controllers
 
             ViewData["Title"] = "Edit a recommendation";
             ViewData["ProjectAssessmentReportId"] = projectAssessmentReportId;
+            ViewBag.EffortMeasures = _adminContext.EffortMeasure.Any() ? _adminContext.EffortMeasure.Select(s => s.Value).ToList() : new List<string>();
             return View(projectAssessmentReportId);
         }
 

@@ -32,6 +32,7 @@
                 </select>
                 <span asp-validation-for="Effort.Measure" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="Status" id="Status" name="Status" value="New" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

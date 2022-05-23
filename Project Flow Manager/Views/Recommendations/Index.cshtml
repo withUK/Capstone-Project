@@ -10,9 +10,6 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="col-sm-1">
-                        Report Reference
-                    </th>
                     <th class="col-sm-4">
                         @Html.DisplayNameFor(model => model.Details)
                     </th>
@@ -36,7 +33,14 @@
                             @Html.DisplayFor(modelItem => item.Details)
                         </td>
                         <td>
+                        @if(item.Effort != null)
+                        {
                             @item.Effort.DisplayEffort()
+                        }
+                        else
+                        {
+                            @Html.DisplayName("No effort recorded")
+                        }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CreatedBy)
