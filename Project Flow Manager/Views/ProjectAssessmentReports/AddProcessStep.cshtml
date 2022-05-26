@@ -1,0 +1,36 @@
+﻿@model Project_Flow_Manager_Models.ProcessStep
+
+@{
+    var recommendationId = @ViewData["RecommendationId"];
+}
+
+<a asp-action="RecommendationDetails" asp-controller="ProjectAssessmentReports" asp-route-id="@recommendationId" class="link-back">Back</a>
+
+<h1>Assessments</h1>
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddProcessStep">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Value" class="form-label"></label>
+                <input asp-for="Value" class="form-control" />
+                <span asp-validation-for="Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderPosition" class="form-label"></label>
+                <input asp-for="OrderPosition" class="form-control" />
+                <span asp-validation-for="OrderPosition" class="text-danger"></span>
+            </div>
+            <input type="hidden" id="recommendationId" name="recommendationId" value="@recommendationId" />
+            <div class="form-group">
+                <input type="submit" value="Add Process Step" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

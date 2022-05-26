@@ -204,11 +204,11 @@ namespace Project_Flow_Manager.Controllers
             var report = _context.ProjectAssessmentReport.Where(r => r.Recommendations.Contains(recommendation)).FirstOrDefault();
             if (report.Recommendations.Count < 2)
             {
-                EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations);
+                report.Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations);
             }
             else
             {
-                EnumHelper.GetDisplayName(StatusEnum.EligibleForDecision);
+                report.Status = EnumHelper.GetDisplayName(StatusEnum.EligibleForDecision);
             }
 
             await _context.SaveChangesAsync();
