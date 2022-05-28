@@ -12,7 +12,7 @@ namespace Project_Flow_Manager_Models
 
         [Display(Name = "Process Steps")]
         public virtual ICollection<ProcessStep>? ProcessSteps { get; set; }
-        public virtual ICollection<Technology>? Technologies { get; set; }
-        public virtual ICollection<Team>? Teams { get; set; }
+        public virtual ICollection<TechnologyResource>? Technologies { get; set; }
+        public virtual ICollection<TeamResource>? Teams { get; set; }
     }
 }

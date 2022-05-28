@@ -86,6 +86,7 @@ namespace Project_Flow_Manager.Controllers
             if (ModelState.IsValid)
             {
                 recommendation.Effort = effort;
+                recommendation.Status = EnumHelper.GetDisplayName(StatusEnum.Submitted);
                 recommendation.Created = DateTime.Now;
                 recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
 

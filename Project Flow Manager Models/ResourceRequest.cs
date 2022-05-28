@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Project_Flow_Manager_Models
 {
-    public class ResourceRequest
+    public class ResourceRequest : Submission
     {
         public ResourceRequest()
         {

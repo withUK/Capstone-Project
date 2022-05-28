@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Project_Flow_Manager.Migrations
 {
     [DbContext(typeof(InnovationManagerContext))]
-    partial class InnovationManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20220527154516_UpdatedModel-RecommendationFields")]
+    partial class UpdatedModelRecommendationFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,12 +166,6 @@ namespace Project_Flow_Manager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("ProjectAssessmentReportId")
                         .HasColumnType("int");
 
@@ -201,9 +197,6 @@ namespace Project_Flow_Manager.Migrations
                     b.Property<int?>("RecommendationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResourceRequestId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -216,9 +209,29 @@ namespace Project_Flow_Manager.Migrations
 
                     b.HasIndex("RecommendationId");
 
-                    b.HasIndex("ResourceRequestId");
-
                     b.ToTable("Tag");
+                });
+
+            modelBuilder.Entity("Project_Flow_Manager_Models.Team", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecommendationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecommendationId");
+
+                    b.ToTable("Team");
                 });
 
             modelBuilder.Entity("Project_Flow_Manager_Models.TeamResource", b =>
@@ -232,9 +245,6 @@ namespace Project_Flow_Manager.Migrations
                     b.Property<int>("Hours")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecommendationId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ResourceRequestId")
                         .HasColumnType("int");
 
@@ -243,8 +253,6 @@ namespace Project_Flow_Manager.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecommendationId");
 
                     b.HasIndex("ResourceRequestId");
 
@@ -363,9 +371,6 @@ namespace Project_Flow_Manager.Migrations
                     b.Property<int?>("RecommendationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResourceRequestId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -377,8 +382,6 @@ namespace Project_Flow_Manager.Migrations
                     b.HasIndex("ProjectAssessmentReportId");
 
                     b.HasIndex("RecommendationId");
-
-                    b.HasIndex("ResourceRequestId");
 
                     b.ToTable("Attachment");
                 });
@@ -403,9 +406,6 @@ namespace Project_Flow_Manager.Migrations
                     b.Property<int?>("RecommendationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResourceRequestId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -417,8 +417,6 @@ namespace Project_Flow_Manager.Migrations
                     b.HasIndex("ProjectAssessmentReportId");
 
                     b.HasIndex("RecommendationId");
-
-                    b.HasIndex("ResourceRequestId");
 
                     b.ToTable("Comment");
                 });
@@ -515,18 +513,17 @@ namespace Project_Flow_Manager.Migrations
                     b.HasOne("Project_Flow_Manager_Models.Recommendation", null)
                         .WithMany("Tags")
                         .HasForeignKey("RecommendationId");
-
-                    b.HasOne("Project_Flow_Manager_Models.ResourceRequest", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("ResourceRequestId");
                 });
 
-            modelBuilder.Entity("Project_Flow_Manager_Models.TeamResource", b =>
+            modelBuilder.Entity("Project_Flow_Manager_Models.Team", b =>
                 {
                     b.HasOne("Project_Flow_Manager_Models.Recommendation", null)
                         .WithMany("Teams")
                         .HasForeignKey("RecommendationId");
+                });
 
+            modelBuilder.Entity("Project_Flow_Manager_Models.TeamResource", b =>
+                {
                     b.HasOne("Project_Flow_Manager_Models.ResourceRequest", null)
                         .WithMany("Teams")
                         .HasForeignKey("ResourceRequestId");
@@ -570,10 +567,6 @@ namespace Project_Flow_Manager.Migrations
                     b.HasOne("Project_Flow_Manager_Models.Recommendation", null)
                         .WithMany("Attachments")
                         .HasForeignKey("RecommendationId");
-
-                    b.HasOne("Project_Flow_Manager_Models.ResourceRequest", null)
-                        .WithMany("Attachments")
-                        .HasForeignKey("ResourceRequestId");
                 });
 
             modelBuilder.Entity("ProjectFlowManagerModels.Comment", b =>
@@ -589,10 +582,6 @@ namespace Project_Flow_Manager.Migrations
                     b.HasOne("Project_Flow_Manager_Models.Recommendation", null)
                         .WithMany("Comments")
                         .HasForeignKey("RecommendationId");
-
-                    b.HasOne("Project_Flow_Manager_Models.ResourceRequest", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ResourceRequestId");
                 });
 
             modelBuilder.Entity("ProjectFlowManagerModels.ProjectAssessmentReport", b =>
@@ -636,12 +625,6 @@ namespace Project_Flow_Manager.Migrations
 
             modelBuilder.Entity("Project_Flow_Manager_Models.ResourceRequest", b =>
                 {
-                    b.Navigation("Attachments");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("Tags");
-
                     b.Navigation("Teams");
 
                     b.Navigation("Technologies");

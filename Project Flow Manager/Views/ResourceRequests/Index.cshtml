@@ -10,19 +10,25 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="col-sm-2">
+                    <th>
                         @Html.DisplayNameFor(model => model.ProjectAssessmentReportId)
                     </th>
-                    <th class="col-sm-2">
+                    <th>
                         @Html.DisplayName("Total Hours")
                     </th>
-                    <th class="col-sm-2">
+                    <th>
                         @Html.DisplayName("Number of Teams")
                     </th>
-                    <th class="col-sm-2">
+                    <th>
                         @Html.DisplayName("Number of Technologies")
                     </th>
-                    <th class="col-sm-2"></th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedBy)
+                    </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +47,12 @@
                         </td>
                         <td>
                             @item.Technologies.Count
+                        </td>
+                        <td>
+                            @item.Created
+                        </td>
+                        <td>
+                            @item.CreatedBy
                         </td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a>
