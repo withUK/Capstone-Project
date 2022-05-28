@@ -15,17 +15,35 @@
             @Html.DisplayFor(model => model.Details)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
+            @Html.DisplayNameFor(model => model.Effort)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
+            @Html.DisplayFor(model => model.Effort.Amount) @Html.DisplayFor(model => model.Effort.Measure)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            @Html.DisplayNameFor(model => model.ProcessSteps)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
+        <dd class="col-sm-10">
+            <a asp-action="AddProcessStep" asp-route-recommendationId="@Model.Id"><i class="fa-solid fa-plus"></i></a>
         </dd>
+        @if(Model.ProcessSteps.Count() > 0)
+        {
+            @foreach(var item in Model.ProcessSteps)
+            {
+                <div class="row">
+                    <dd class = "col-sm-2"></dd>
+                    <dd class = "col-sm-3">
+                        @string.Concat(item.OrderPosition,". ",item.Value)
+                    </dd>
+                    <dd class = "col-sm-2">
+                        <a asp-action="EditProcessStep" asp-route-id="@item.Id" asp-route-innovationId="@Model.Id"><i class="fa-solid fa-pen-to-square"></i></a>|
+                        <a asp-action="DeleteProcessStep" asp-route-id="@item.Id" asp-route-innovationId="@Model.Id"><i class="fa-solid fa-trash-can"></i></a>
+                    </dd>
+                    <dd class = "col-sm-5"></dd>
+                </div>
+            }
+        }
+        <partial name="/Views/Shared/_SubmissionDetails.cshtml" />
     </dl>
 </div>
 <div>

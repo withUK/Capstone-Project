@@ -22,7 +22,7 @@ namespace Project_Flow_Manager.Helpers
         public static List<Innovation> GetCurrentUserInnovationSubmissions(string currentUser, InnovationManagerContext dbContext)
         {
             return dbContext.Innovation
-                .Where(p => p.SubmittedBy.Equals(currentUser))
+                .Where(p => p.CreatedBy.Equals(currentUser))
                 .ToList();
         }
 

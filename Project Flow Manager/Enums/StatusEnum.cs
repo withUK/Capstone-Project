@@ -6,6 +6,8 @@ namespace Project_Flow_Manager.Enums
     {
         [Display(Name = "New")]
         New,
+        [Display(Name = "Submitted")]
+        Submitted,
         [Display(Name = "Approved")]
         Approved,
         [Display(Name = "Declined")]

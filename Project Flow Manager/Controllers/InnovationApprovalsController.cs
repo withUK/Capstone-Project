@@ -112,7 +112,14 @@ namespace Project_Flow_Manager.Controllers
                 innovation.Approval = approval;
                 _context.Innovation.Update(innovation);
 
-                ProjectAssessmentReport report = new ProjectAssessmentReport { Title = innovation.Title, Innovation = innovation, Status = EnumHelper.GetDisplayName(StatusEnum.New) };
+                ProjectAssessmentReport report = new ProjectAssessmentReport { 
+                    Title = innovation.Title, 
+                    Innovation = innovation, 
+                    Status = EnumHelper.GetDisplayName(StatusEnum.New),
+                    Created = DateTime.Now,
+                    CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name
+                };
+                
                 _context.ProjectAssessmentReport.Add(report);
 
                 await _context.SaveChangesAsync();
