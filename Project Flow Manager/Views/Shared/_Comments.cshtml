@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ProjectFlowManagerModels.Comment>
+
+@{
+    var subController = ViewData["ControllerName"];
+    var subSubmissionId = ViewData["SubmissionId"];
+}
+
+<hr />
+<h3>Comments</h3>
+
+<dd class="col-sm-10">
+    <a asp-action="Create" asp-controller="Comments" asp-route-submissionId="@subSubmissionId" asp-route-controllerName="@subController"><i class="fa-solid fa-plus"></i></a>
+</dd>
+@if(Model.Count() > 0)
+{
+    @foreach(var item in @Model)
+    {
+        <div class="row">
+            <dd class = "col-sm-7 col-wrap">@item.Value</dd>
+            <dd class = "col-sm-2 col-wrap">@item.CreatedBy</dd>
+            <dd class = "col-sm-2 col-wrap">@item.Created</dd>
+            <dd class = "col-sm-1 col-wrap">
+                <a asp-action="Delete" asp-controller="Comments" asp-route-id="@item.Id" asp-route-controller="@subController" asp-route-submissionId="@subSubmissionId"><i class="fa-solid fa-trash-can"></i></a>
+            </dd>
+        </div>
+    }
+}

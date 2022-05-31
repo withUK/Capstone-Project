@@ -51,8 +51,10 @@ namespace Project_Flow_Manager.Controllers
             }
 
             var resourceRequest = await _context.ResourceRequest
+                .Include(r => r.ProjectAssessmentReport)
                 .Include(r => r.Teams)
                 .Include(r => r.Technologies)
+                .Include(r => r.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (resourceRequest == null)
@@ -61,6 +63,8 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = string.Concat("Details of Request Id ", resourceRequest.Id);
+            ViewData["ControllerName"] = "ResourceRequests";
+            ViewData["SubmissionId"] = resourceRequest.Id;
             return View(resourceRequest);
         }
 

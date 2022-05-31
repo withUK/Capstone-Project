@@ -129,7 +129,13 @@ namespace Project_Flow_Manager.Controllers
                 
                 if (approvalCount >= 2)
                 {
-                    var resouceRequest = new ResourceRequest() { ProjectAssessmentReport = projectAssessmentReport, Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingAllocationOfResource)};
+                    var resouceRequest = new ResourceRequest()
+                    {
+                        ProjectAssessmentReport = projectAssessmentReport,
+                        Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingAllocationOfResource),
+                        Created = DateTime.Now,
+                        CreatedBy = GetCurrentUser()
+                    };
                     _context.ResourceRequest.Add(resouceRequest);
                 }
 

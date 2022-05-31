@@ -29,5 +29,7 @@ public class InnovationManagerContext : DbContext
 
     public DbSet<TeamResource>? TeamResource { get; set; }
 
-    public DbSet<Project_Flow_Manager_Models.TechnologyResource>? TechnologyResource { get; set; }
+    public DbSet<TechnologyResource>? TechnologyResource { get; set; }
+
+    public DbSet<Comment>? Comment { get; set; }
 }
