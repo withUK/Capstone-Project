@@ -1,6 +1,10 @@
 ﻿@model Project_Flow_Manager_Models.ProcessStep
 
-<a asp-action="Index" asp-controller="ProcessSteps" asp-route-innovationId=@ViewData["InnovationId"] class="link-back">Back</a>
+@{
+    var innovationId = ViewData["InnovationId"];
+}
+
+<a asp-action="ProcessSteps" asp-controller="Innovations" asp-route-id="@innovationId" class="link-back">Back</a>
 
 <h1>Submissions</h1>
 <h2>@ViewData["Title"]</h2>
@@ -26,7 +30,7 @@
     
     <form asp-action="DeleteProcessStep">
         <input type="hidden" asp-for="Id" />
-        <input type="hidden" id="innovationId" name="innovationId" value=@ViewData["InnovationId"] />
+        <input type="hidden" id="innovationId" name="innovationId" value="@innovationId" />
         <input type="submit" value="Delete" class="btn btn-danger" />
     </form>
 </div>
