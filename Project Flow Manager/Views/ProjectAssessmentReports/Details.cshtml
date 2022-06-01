@@ -1,4 +1,5 @@
-﻿@model ProjectFlowManagerModels.ProjectAssessmentReport
+﻿@using ProjectFlowManagerModels
+@model ProjectFlowManagerModels.ProjectAssessmentReport
 
 <a asp-action="Index" asp-controller="ProjectAssessmentReports" class="link-back">Back</a>
 
@@ -64,4 +65,8 @@
             @Html.DisplayFor(model => model.Innovation.ProcessDuration)
         </dd>
     </dl>
+</div>
+
+<div class="row">
+    @await Html.PartialAsync("/Views/Shared/_Comments.cshtml", @Model.Comments == null? new List<Comment>() : Model.Comments)
 </div>

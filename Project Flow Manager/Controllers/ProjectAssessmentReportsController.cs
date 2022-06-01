@@ -57,6 +57,8 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = string.Concat("Details of ", projectAssessmentReport.Title);
+            ViewData["ControllerName"] = "ProjectAssessmentReports";
+            ViewData["SubmissionId"] = projectAssessmentReport.Id;
             return View(projectAssessmentReport);
         }
 
@@ -253,7 +255,9 @@ namespace Project_Flow_Manager.Controllers
         /// <returns></returns>
         public async Task<IActionResult> RecommendationDetails(int? id)
         {
-            var projectAssessmentReport = _context.ProjectAssessmentReport.Where(r => r.Recommendations.Any(x => x.Id == id)).FirstOrDefault();
+            var projectAssessmentReport = _context.ProjectAssessmentReport
+                .Where(r => r.Recommendations.Any(x => x.Id == id))
+                .FirstOrDefault();
 
             if (id == null)
             {
@@ -263,6 +267,9 @@ namespace Project_Flow_Manager.Controllers
             var recommendation = await _context.Recommendation
                 .Include(_r => _r.Effort)
                 .Include(r => r.ProcessSteps)
+                .Include(r => r.Teams)
+                .Include(r => r.Technologies)
+                .Include(r => r.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (recommendation == null)
             {
@@ -270,7 +277,8 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = string.Concat("Details of recommendation : ", recommendation.Id);
-            ViewData["ProjectAssessmentReportId"] = projectAssessmentReport.Id;
+            ViewData["ControllerName"] = "ProjectAssessmentReports";
+            ViewData["SubmissionId"] = projectAssessmentReport.Id;
             return View(recommendation);
         }
 

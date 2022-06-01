@@ -15,6 +15,7 @@ namespace Project_Flow_Manager.Helpers
                 .ThenInclude(r => r.Effort)
                 .Include(p => p.Innovation)
                 .Include(p => p.Innovation.ProcessSteps)
+                .Include(p => p.Comments)
                 .Include(p => p.Innovation.Approval)
                 .FirstOrDefault(m => m.Id == projectAssessmentReportId);
         }
