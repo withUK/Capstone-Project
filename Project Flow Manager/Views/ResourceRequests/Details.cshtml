@@ -1,4 +1,5 @@
-﻿@model Project_Flow_Manager_Models.ResourceRequest
+﻿@using ProjectFlowManagerModels
+@model Project_Flow_Manager_Models.ResourceRequest
 
 <a asp-action="Index" asp-controller="ResourceRequests" class="link-back">Back</a>
 
@@ -8,6 +9,7 @@
 <div>
     <hr />
     <dl class="row">
+        <h3>Project Assessment Details</h3>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ProjectAssessmentReportId)
         </dt>
@@ -20,6 +22,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ProjectAssessmentReport.Title)
         </dd>
+        <h3>Requested Resources</h3>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Teams)
         </dt>
@@ -71,3 +74,7 @@
 {
     <a class="btn btn-primary" asp-action="ConfirmResourceRequest" asp-route-id="@Model.Id" asp-route-resourceRequestId="@Model.Id">Confirm</a>
 }
+
+<div class="row">
+    @await Html.PartialAsync("/Views/Shared/_Comments.cshtml", @Model.Comments == null? new List<Comment>() : Model.Comments)
+</div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 
@@ -43,13 +44,19 @@ namespace Project_Flow_Manager.Controllers
 
             var innovation = await _context.Innovation
                 .Include(m => m.ProcessSteps)
+                .Include(m => m.Technologies)
+                .Include(m => m.Comments)
+                .Include(m => m.Tags)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (innovation == null)
             {
                 return NotFound();
             }
 
             ViewData["Title"] = string.Concat("Details of ", innovation.Title);
+            ViewData["ControllerName"] = "Innovations";
+            ViewData["SubmissionId"] = innovation.Id;
             return View(innovation);
         }
 
@@ -75,7 +82,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Create([Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
         {
             innovation.Created = DateTime.Now;
-            innovation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+            innovation.CreatedBy = HttpContext.User.Identity.Name == null ? "Unknown User" : HttpContext.User.Identity.Name;
             innovation.ProcessSteps = new List<ProcessStep>();
 
             if (ModelState.IsValid)

@@ -1,10 +1,11 @@
-﻿@model Project_Flow_Manager_Models.Recommendation
+﻿@using ProjectFlowManagerModels
+@model Project_Flow_Manager_Models.Recommendation
 
 @{
-    var projectAssessmentReportId = ViewData["ProjectAssessmentReportId"];
+    var submissionId = ViewData["SubmissionId"];
 }
 
-<a asp-action="Details" asp-controller="ProjectAssessmentReports" asp-route-id="@projectAssessmentReportId" class="link-back">Back</a>
+<a asp-action="Details" asp-controller="ProjectAssessmentReports" asp-route-id="@submissionId" class="link-back">Back</a>
 
 <h1>Assessments</h1>
 <h2>@ViewData["Title"]</h2>
@@ -46,4 +47,8 @@
 </div>
 <div>
     <a asp-action="EditRecommendation" asp-route-id="@Model?.Id" class="btn btn-success">Edit</a>
+</div>
+
+<div class="row">
+    @await Html.PartialAsync("/Views/Shared/_Comments.cshtml", @Model.Comments == null? new List<Comment>() : Model.Comments)
 </div>

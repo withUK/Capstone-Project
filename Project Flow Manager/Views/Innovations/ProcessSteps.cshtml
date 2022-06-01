@@ -1,6 +1,6 @@
 ﻿@model Project_Flow_Manager_Models.Innovation
 
-<a asp-action="Index" asp-controller="Innovations" class="link-back">Back</a>
+<a asp-action="Details" asp-controller="Innovations" asp-route-id="@Model.Id" class="link-back">Back</a>
 
 <h1>@ViewData["Title"]</h1>
 
@@ -31,7 +31,7 @@
                         @Html.DisplayFor(modelItem => item.Value)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="EditProcessStep" asp-route-id="@item.Id" asp-route-innovationId="@Model.Id">Edit</a> |
                         <a asp-action="DeleteProcessStep" asp-route-id="@item.Id" asp-route-innovationId="@Model.Id">Delete</a>
                     </td>
                 </tr>

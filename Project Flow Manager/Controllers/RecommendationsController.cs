@@ -51,6 +51,9 @@ namespace Project_Flow_Manager.Controllers
             var recommendation = await _context.Recommendation
                 .Include(_r => _r.Effort)
                 .Include(r => r.ProcessSteps)
+                .Include(r => r.Teams)
+                .Include(r => r.Technologies)
+                .Include(r => r.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (recommendation == null)
@@ -59,6 +62,8 @@ namespace Project_Flow_Manager.Controllers
             }
 
             ViewData["Title"] = string.Concat("Details of recommendation : ", recommendation.Id);
+            ViewData["ControllerName"] = "Recommendations";
+            ViewData["SubmissionId"] = recommendation.Id;
             return View(recommendation);
         }
 
