@@ -5,115 +5,109 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Project_Flow_Manager.Enums;
-using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
-using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
 {
-    public class CommentsController : Controller
+    public class TagsController : Controller
     {
         private readonly InnovationManagerContext _context;
 
-        public CommentsController(InnovationManagerContext context)
+        public TagsController(InnovationManagerContext context)
         {
             _context = context;
         }
 
-        // GET: Comments
-        public async Task<IActionResult> Index(SubmissionTypeEnum type)
+        // GET: Tags
+        public async Task<IActionResult> Index()
         {
-            return _context.Comment != null ? 
-                          View(await _context.Comment.ToListAsync()) :
-                          Problem("Entity set 'InnovationManagerContext.Comment'  is null.");
+              return _context.Tag != null ? 
+                          View(await _context.Tag.ToListAsync()) :
+                          Problem("Entity set 'InnovationManagerContext.Tag'  is null.");
         }
 
-        // GET: Comments/Details/5
+        // GET: Tags/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Comment == null)
+            if (id == null || _context.Tag == null)
             {
                 return NotFound();
             }
 
-            var comment = await _context.Comment
+            var tag = await _context.Tag
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (comment == null)
+            if (tag == null)
             {
                 return NotFound();
             }
 
-            return View(comment);
+            return View(tag);
         }
 
-        // GET: Comments/Create
+        // GET: Tags/Create
         public IActionResult Create(string controllerName, int submissionId)
         {
             ViewData["Controller"] = controllerName;
             ViewData["SubmissionId"] = submissionId;
-            ViewData["Title"] = "Comments";
+            ViewData["Title"] = "Tags";
 
             return View();
         }
 
-        // POST: Comments/Create
+        // POST: Tags/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Value")] Comment comment, string controllerName, int submissionId)
+        public async Task<IActionResult> Create([Bind("Value")] Tag tag, string controllerName, int submissionId)
         {
-            comment.Created = DateTime.Now;
-            comment.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
-
             if (ModelState.IsValid)
             {
-                _context.Add(comment);
+                _context.Add(tag);
 
                 switch (controllerName)
                 {
                     case "Innovations":
                         var innovation = _context.Innovation.Where(i => i.Id == submissionId)
-                            .Include(i => i.Comments)
+                            .Include(i => i.Tags)
                             .FirstOrDefault();
 
                         if (innovation != null)
                         {
-                            innovation.Comments.Add(comment);
+                            innovation.Tags.Add(tag);
                             _context.Update(innovation);
                         }
                         break;
                     case "ProjectAssessmentReports":
                         var report = _context.ProjectAssessmentReport.Where(i => i.Id == submissionId)
-                            .Include(i => i.Comments)
+                            .Include(i => i.Tags)
                             .FirstOrDefault();
 
                         if (report != null)
                         {
-                            report.Comments.Add(comment);
+                            report.Tags.Add(tag);
                             _context.Update(report);
                         }
                         break;
                     case "Recommendations":
                         var recommendation = _context.Recommendation.Where(i => i.Id == submissionId)
-                            .Include(i => i.Comments)
+                            .Include(i => i.Tags)
                             .FirstOrDefault();
 
                         if (recommendation != null)
                         {
-                            recommendation.Comments.Add(comment);
+                            recommendation.Tags.Add(tag);
                             _context.Update(recommendation);
                         }
                         break;
                     case "ResourceRequests":
                         var request = _context.ResourceRequest.Where(i => i.Id == submissionId)
-                            .Include(i => i.Comments)
+                            .Include(i => i.Tags)
                             .FirstOrDefault();
 
                         if (request != null)
                         {
-                            request.Comments.Add(comment);
+                            request.Tags.Add(tag);
                             _context.Update(request);
                         }
                         break;
@@ -127,50 +121,100 @@ namespace Project_Flow_Manager.Controllers
                     return RedirectToAction(nameof(Details), controllerName, new { id = submissionId });
                 }
             }
-            return View(comment);
+            return View(tag);
         }
 
-        // GET: Comments/Delete/5
-        public async Task<IActionResult> Delete(int? id, string controller, int submissionId)
+        // GET: Tags/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Comment == null)
+            if (id == null || _context.Tag == null)
             {
                 return NotFound();
             }
 
-            var comment = await _context.Comment
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (comment == null)
+            var tag = await _context.Tag.FindAsync(id);
+            if (tag == null)
             {
                 return NotFound();
             }
-
-            return View(comment);
+            return View(tag);
         }
 
-        // POST: Comments/Delete/5
+        // POST: Tags/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Value")] Tag tag)
+        {
+            if (id != tag.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tag);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TagExists(tag.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tag);
+        }
+
+        // GET: Tags/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Tag == null)
+            {
+                return NotFound();
+            }
+
+            var tag = await _context.Tag
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+
+            return View(tag);
+        }
+
+        // POST: Tags/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id, string controller, int submissionId)
         {
-            if (_context.Comment == null)
+            if (_context.Tag == null)
             {
-                return Problem("Entity set 'InnovationManagerContext.Comment'  is null.");
+                return Problem("Entity set 'InnovationManagerContext.Tag'  is null.");
             }
-
-            var comment = await _context.Comment.FirstOrDefaultAsync(c => c.Id == id);
-            if (comment != null)
+            var tag = await _context.Tag.FindAsync(id);
+            if (tag != null)
             {
-                _context.Comment.Remove(comment);
+                _context.Tag.Remove(tag);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), controller, new { id = submissionId });
         }
 
-        private bool CommentExists(int id)
+        private bool TagExists(int id)
         {
-          return (_context.Comment?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Tag?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

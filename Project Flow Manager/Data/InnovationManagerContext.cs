@@ -32,4 +32,6 @@ public class InnovationManagerContext : DbContext
     public DbSet<TechnologyResource>? TechnologyResource { get; set; }
 
     public DbSet<Comment>? Comment { get; set; }
+
+    public DbSet<Tag>? Tag { get; set; }
 }
