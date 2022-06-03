@@ -16,6 +16,7 @@ namespace Project_Flow_Manager.Helpers
                 .Include(p => p.Innovation)
                 .Include(p => p.Innovation.ProcessSteps)
                 .Include(p => p.Comments)
+                .Include(p => p.Tags)
                 .Include(p => p.Innovation.Approval)
                 .FirstOrDefault(m => m.Id == projectAssessmentReportId);
         }
@@ -38,10 +39,13 @@ namespace Project_Flow_Manager.Helpers
         {
             return dbContext.ProjectAssessmentReport
                 .Where(p => p.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations)) || p.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.New)) || p.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.EligibleForDecision)))
+                .Include(p => p.Approvals)
                 .Include(p => p.Recommendations)
                 .ThenInclude(r => r.Effort)
                 .Include(p => p.Innovation)
                 .Include(p => p.Innovation.ProcessSteps)
+                .Include(p => p.Comments)
+                .Include(p => p.Tags)
                 .Include(p => p.Innovation.Approval)
                 .ToList();
         }
@@ -50,10 +54,13 @@ namespace Project_Flow_Manager.Helpers
         {
             return dbContext.ProjectAssessmentReport
                 .Where(p => p.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.EligibleForDecision)) || p.Status.Equals(EnumHelper.GetDisplayName(StatusEnum.AwaitingAdditionalApproval)))
+                .Include(p => p.Approvals)
                 .Include(p => p.Recommendations)
                 .ThenInclude(r => r.Effort)
                 .Include(p => p.Innovation)
                 .Include(p => p.Innovation.ProcessSteps)
+                .Include(p => p.Comments)
+                .Include(p => p.Tags)
                 .Include(p => p.Innovation.Approval)
                 .ToList();
         }

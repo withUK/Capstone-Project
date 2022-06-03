@@ -8,6 +8,9 @@
 
 <div>
     <hr />
+    <div class="row">
+        @await Html.PartialAsync("/Views/Shared/_Tags.cshtml", @Model.Tags == null? new List<Comment>() : Model.Tags)
+    </div><br />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Details)
