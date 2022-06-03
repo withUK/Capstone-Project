@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager.Enums;
 using Project_Flow_Manager.Helpers;
 using ProjectFlowManagerModels;
+using System.Security.Claims;
 
 namespace Project_Flow_Manager.Controllers
 {
@@ -88,7 +89,7 @@ namespace Project_Flow_Manager.Controllers
             }
 
             approval.ApprovedOn = DateTime.Now;
-            approval.ApprovedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+            approval.ApprovedBy = GetCurrentUserName();
             approval.Outcome = "Approved";
             approval.Type = "Innovation Submission";
 
@@ -117,7 +118,7 @@ namespace Project_Flow_Manager.Controllers
                     Innovation = innovation, 
                     Status = EnumHelper.GetDisplayName(StatusEnum.New),
                     Created = DateTime.Now,
-                    CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name
+                    CreatedBy = GetCurrentUserName()
                 };
                 
                 _context.ProjectAssessmentReport.Add(report);
@@ -180,7 +181,7 @@ namespace Project_Flow_Manager.Controllers
             if (ModelState.IsValid)
             {
                 approval.ApprovedOn = DateTime.Now;
-                approval.ApprovedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+                approval.ApprovedBy = GetCurrentUserName();
                 approval.Outcome = "Declined";
                 approval.Type = "Innovation Submission";
                 _context.Approval.Add(approval);
@@ -197,6 +198,16 @@ namespace Project_Flow_Manager.Controllers
             ViewData["InnovationId"] = innovationId;
 
             return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
+        {
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
     }
 }

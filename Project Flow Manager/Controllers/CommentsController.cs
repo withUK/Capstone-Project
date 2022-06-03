@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager.Enums;
-using Project_Flow_Manager.Helpers;
-using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
 
 namespace Project_Flow_Manager.Controllers
@@ -21,7 +15,11 @@ namespace Project_Flow_Manager.Controllers
             _context = context;
         }
 
-        // GET: Comments
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Index(SubmissionTypeEnum type)
         {
             return _context.Comment != null ? 
@@ -29,7 +27,11 @@ namespace Project_Flow_Manager.Controllers
                           Problem("Entity set 'InnovationManagerContext.Comment'  is null.");
         }
 
-        // GET: Comments/Details/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Comment == null)
@@ -47,7 +49,12 @@ namespace Project_Flow_Manager.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controllerName"></param>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
         public IActionResult Create(string controllerName, int submissionId)
         {
             ViewData["Controller"] = controllerName;
@@ -57,15 +64,19 @@ namespace Project_Flow_Manager.Controllers
             return View();
         }
 
-        // POST: Comments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Value")] Comment comment, string controllerName, int submissionId)
         {
             comment.Created = DateTime.Now;
-            comment.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+            comment.CreatedBy = GetCurrentUserName();
 
             if (ModelState.IsValid)
             {
@@ -130,7 +141,13 @@ namespace Project_Flow_Manager.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="controller"></param>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id, string controller, int submissionId)
         {
             if (id == null || _context.Comment == null)
@@ -148,7 +165,13 @@ namespace Project_Flow_Manager.Controllers
             return View(comment);
         }
 
-        // POST: Comments/Delete/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="controller"></param>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id, string controller, int submissionId)
@@ -166,6 +189,16 @@ namespace Project_Flow_Manager.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), controller, new { id = submissionId });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
+        {
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
 
         private bool CommentExists(int id)

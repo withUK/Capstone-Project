@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -90,6 +91,9 @@ namespace Project_Flow_Manager.Controllers
         {
             if (ModelState.IsValid)
             {
+                resourceRequest.Created = DateTime.Now;
+                resourceRequest.CreatedBy = GetCurrentUserName();
+                resourceRequest.Status = EnumHelper.GetDisplayName(StatusEnum.New);
                 _context.Add(resourceRequest);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -340,6 +344,16 @@ namespace Project_Flow_Manager.Controllers
             resourceRequest.Status = EnumHelper.GetDisplayName(StatusEnum.PassedToDevelopement);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
+        {
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
 
         /// <summary>

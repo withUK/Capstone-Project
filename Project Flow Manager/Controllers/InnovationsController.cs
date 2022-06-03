@@ -27,7 +27,8 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Submissions";
-            return View(DatabaseHelper.GetCurrentUserInnovationSubmissions(User.Identity.Name, _context));
+
+            return View(DatabaseHelper.GetCurrentUserInnovationSubmissions(GetCurrentUserName(), _context));
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Project_Flow_Manager.Controllers
         public async Task<IActionResult> Create([Bind("Id,Title,Description,ProcessDuration,NumberOfPeopleIncluded,ProcessType,Status,RequiredDate")] Innovation innovation)
         {
             innovation.Created = DateTime.Now;
-            innovation.CreatedBy = HttpContext.User.Identity.Name == null ? "Unknown User" : HttpContext.User.Identity.Name;
+            innovation.CreatedBy = GetCurrentUserName();
             innovation.ProcessSteps = new List<ProcessStep>();
 
             if (ModelState.IsValid)
@@ -376,6 +377,16 @@ namespace Project_Flow_Manager.Controllers
             ViewData["ActionResult"] = "success";
 
             return RedirectToAction(nameof(ProcessSteps), new { innovationId = innovationId });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
+        {
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
 
         /// <summary>

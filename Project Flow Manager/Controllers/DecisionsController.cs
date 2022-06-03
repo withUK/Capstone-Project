@@ -4,6 +4,7 @@ using Project_Flow_Manager.Enums;
 using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
+using System.Security.Claims;
 
 namespace Project_Flow_Manager.Controllers
 {
@@ -116,7 +117,7 @@ namespace Project_Flow_Manager.Controllers
             if (ModelState.IsValid)
             {
                 approval.ApprovedOn = DateTime.Now;
-                approval.ApprovedBy = GetCurrentUser();
+                approval.ApprovedBy = GetCurrentUserName();
                 approval.Outcome = EnumHelper.GetDisplayName(StatusEnum.Approved);
                 approval.Type = EnumHelper.GetDisplayName(ApprovalTypeEnum.ProjectAssessmentReport);
 
@@ -134,7 +135,7 @@ namespace Project_Flow_Manager.Controllers
                         ProjectAssessmentReport = projectAssessmentReport,
                         Status = EnumHelper.GetDisplayName(StatusEnum.AwaitingAllocationOfResource),
                         Created = DateTime.Now,
-                        CreatedBy = GetCurrentUser()
+                        CreatedBy = GetCurrentUserName()
                     };
                     _context.ResourceRequest.Add(resouceRequest);
                 }
@@ -194,7 +195,7 @@ namespace Project_Flow_Manager.Controllers
             if (ModelState.IsValid)
             {
                 approval.ApprovedOn = DateTime.Now;
-                approval.ApprovedBy = GetCurrentUser();
+                approval.ApprovedBy = GetCurrentUserName();
                 approval.Outcome = EnumHelper.GetDisplayName(StatusEnum.Declined);
                 approval.Type = EnumHelper.GetDisplayName(ApprovalTypeEnum.ProjectAssessmentReport);
 
@@ -215,6 +216,10 @@ namespace Project_Flow_Manager.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectAssessmentReport"></param>
         private static void SetDecisionStatus(ProjectAssessmentReport? projectAssessmentReport)
         {
             if (projectAssessmentReport.Approvals.Count() >= 2)
@@ -227,9 +232,14 @@ namespace Project_Flow_Manager.Controllers
             }
         }
 
-        private string GetCurrentUser()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
         {
-            return User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
     }
 }
