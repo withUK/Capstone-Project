@@ -18,4 +18,8 @@ public class ProjectFlowAdministrationContext : DbContext
     public DbSet<EffortMeasure>? EffortMeasure { get; set; }
 
     public DbSet<Team>? Team { get; set; }
+
+    public DbSet<Project_Flow_Manager_Models.Role>? Role { get; set; }
+
+    public DbSet<Project_Flow_Manager_Models.RoleAssignment>? RoleAssignment { get; set; }
 }

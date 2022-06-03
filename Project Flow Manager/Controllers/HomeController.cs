@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjectFlowManager.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace ProjectFlowManager.Controllers
 {
@@ -27,6 +29,7 @@ namespace ProjectFlowManager.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Home";
+            ViewData["UserRole"] = User.HasClaim(ClaimTypes.Role, "User");
             return View();
         }
 
