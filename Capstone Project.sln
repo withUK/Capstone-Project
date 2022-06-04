@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectFlowManager", "Project Flow Manager\ProjectFlowManager.csproj", "{41C99B09-27E9-4509-AC75-A928E1ECCC36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectFlowManager", "Project Flow Manager\ProjectFlowManager.csproj", "{41C99B09-27E9-4509-AC75-A928E1ECCC36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectFlowManagerAdministration", "Project Flow Manager Administration\ProjectFlowManagerAdministration.csproj", "{9C47EC2B-BDB1-482E-8A4C-16938CAC9FFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectFlowManagerAdministration", "Project Flow Manager Administration\ProjectFlowManagerAdministration.csproj", "{9C47EC2B-BDB1-482E-8A4C-16938CAC9FFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectFlowManagerModels", "Project Flow Manager Models\ProjectFlowManagerModels.csproj", "{3B1AC1C8-2673-4B6C-9AA3-5165AB50DEDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectFlowManagerModels", "Project Flow Manager Models\ProjectFlowManagerModels.csproj", "{3B1AC1C8-2673-4B6C-9AA3-5165AB50DEDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectFlowManagerUnitTests", "ProjectFlowManagerUnitTests\ProjectFlowManagerUnitTests.csproj", "{D46CFED8-48E5-4D93-886D-C0FC1B1A49D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{3B1AC1C8-2673-4B6C-9AA3-5165AB50DEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B1AC1C8-2673-4B6C-9AA3-5165AB50DEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B1AC1C8-2673-4B6C-9AA3-5165AB50DEDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D46CFED8-48E5-4D93-886D-C0FC1B1A49D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D46CFED8-48E5-4D93-886D-C0FC1B1A49D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D46CFED8-48E5-4D93-886D-C0FC1B1A49D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D46CFED8-48E5-4D93-886D-C0FC1B1A49D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
