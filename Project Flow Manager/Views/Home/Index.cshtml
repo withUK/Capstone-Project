@@ -1,46 +1,68 @@
-﻿<h1>
+﻿@{
+    var userRoles = ViewBag.UserRoles;
+}
+
+<h1>
     Overview
 </h1>
 
 <div class="groupPromo">
     <div class="listWebpart">
         <ul>
-            <li>
-                <a asp-action="Index" asp-controller="Innovations">
-                    <h3>Submissions</h3>
-                    <p>Submit and manage your submissions for solutions for use by the authority.</p>
-                </a>
-            </li>
-            <li>
-                <a asp-action="Index" asp-controller="InnovationApprovals">
-                    <h3>Approvals</h3>
-                    <p>Review and approve ideas submitted by business partners and colleagues.</p>
-                </a>
-            </li>
-            <li>
-                <a asp-action="Index" asp-controller="ProjectAssessmentReports">
-                    <h3>Assessments</h3>
-                    <p>Gather recommendations to solutions from teams across the directorate.</p>
-                </a>
-            </li>
-            <li>
-                <a asp-action="Index" asp-controller="Recommendations">
-                    <h3>Recommendations</h3>
-                    <p>Suggested solutions by teams to submitted project requests.</p>
-                </a>
-            </li>
-            <li>
-                <a asp-action="Index" asp-controller="Decisions">
-                    <h3>Decisions</h3>
-                    <p>Review recommendations to make a decision on which idea goes into development.</p>
-                </a>
-            </li>
-            <li>
-                <a asp-action="Index" asp-controller="ResourceRequests">
-                    <h3>Resourcing</h3>
-                    <p>Create and manage the requests for resources for the generated projects.</p>
-                </a>
-            </li>
+            @if (userRoles.Contains("Administrator") || userRoles.Contains("User"))
+            {
+                <li>
+                    <a asp-action="Index" asp-controller="Innovations">
+                        <h3>Submissions</h3>
+                        <p>Submit and manage your submissions for solutions for use by the authority.</p>
+                    </a>
+                </li>
+            }
+            @if (userRoles.Contains("Administrator") || userRoles.Contains("Innovation Approver"))
+            {
+                <li>
+                    <a asp-action="Index" asp-controller="InnovationApprovals">
+                        <h3>Approvals</h3>
+                        <p>Review and approve ideas submitted by business partners and colleagues.</p>
+                    </a>
+                </li>
+            }  
+            @if (userRoles.Contains("Administrator") || userRoles.Contains("Project Report Assessor"))
+            {
+                <li>
+                    <a asp-action="Index" asp-controller="ProjectAssessmentReports">
+                        <h3>Assessments</h3>
+                        <p>Gather recommendations to solutions from teams across the directorate.</p>
+                    </a>
+                </li>
+            }  
+            @if (userRoles.Contains("Administrator") || userRoles.Contains("Developer"))
+            {
+                <li>
+                    <a asp-action="Index" asp-controller="Recommendations">
+                        <h3>Recommendations</h3>
+                        <p>Suggested solutions by teams to submitted project requests.</p>
+                    </a>
+                </li>
+            }  
+            @if (userRoles.Contains("Administrator") || userRoles.Contains("Project Report Assessor"))
+            {
+                <li>
+                    <a asp-action="Index" asp-controller="Decisions">
+                        <h3>Decisions</h3>
+                        <p>Review recommendations to make a decision on which idea goes into development.</p>
+                    </a>
+                </li>
+            }  
+            @if (userRoles.Contains("Administrator") || userRoles.Contains("Resource Manager"))
+            {
+                <li>
+                    <a asp-action="Index" asp-controller="ResourceRequests">
+                        <h3>Resourcing</h3>
+                        <p>Create and manage the requests for resources for the generated projects.</p>
+                    </a>
+                </li>
+            }
         </ul>
     </div>
 </div>

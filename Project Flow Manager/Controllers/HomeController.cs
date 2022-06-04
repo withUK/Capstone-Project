@@ -12,13 +12,17 @@ namespace ProjectFlowManager.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly InnovationManagerContext _context;
+        private readonly ProjectFlowAdministrationContext _adminContext;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logger"></param>
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, InnovationManagerContext context, ProjectFlowAdministrationContext adminContext)
         {
+            _context = context;
+            _adminContext = adminContext;
             _logger = logger;
         }
 
@@ -26,11 +30,27 @@ namespace ProjectFlowManager.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Home";
-            ViewData["UserRole"] = User.HasClaim(ClaimTypes.Role, "User");
+
+            var roles = _adminContext.RoleAssignment
+                .Where(r => r.UserName == GetCurrentUserName())
+                .Select(r => r.Role.Name).ToList();
+
+            ViewData["UserRoles"] = roles;
+
             return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
+        {
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
 
         /// <summary>
