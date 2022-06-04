@@ -6,6 +6,7 @@ using Project_Flow_Manager.Enums;
 using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
 using ProjectFlowManagerModels;
+using System.Security.Claims;
 
 namespace Project_Flow_Manager.Controllers
 {
@@ -232,7 +233,7 @@ namespace Project_Flow_Manager.Controllers
                 recommendation.Effort = effort;
                 recommendation.Status = EnumHelper.GetDisplayName(StatusEnum.Submitted);
                 recommendation.Created = DateTime.Now;
-                recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+                recommendation.CreatedBy = GetCurrentUserName();
 
                 projectAssessmentReport.Recommendations.Add(recommendation);
                 UpdateAssessmentStatus(projectAssessmentReport);
@@ -547,6 +548,16 @@ namespace Project_Flow_Manager.Controllers
         private static void UpdateAssessmentStatus(ProjectAssessmentReport projectAssessmentReport)
         {
             projectAssessmentReport.Status = projectAssessmentReport.Recommendations.Count() >= 2 ? EnumHelper.GetDisplayName(StatusEnum.EligibleForDecision) : EnumHelper.GetDisplayName(StatusEnum.AwaitingFurtherRecommendations);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
+        {
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
 
         /// <summary>

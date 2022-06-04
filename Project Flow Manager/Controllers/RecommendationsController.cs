@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager.Enums;
 using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
+using System.Security.Claims;
 
 namespace Project_Flow_Manager.Controllers
 {
@@ -93,7 +94,7 @@ namespace Project_Flow_Manager.Controllers
                 recommendation.Effort = effort;
                 recommendation.Status = EnumHelper.GetDisplayName(StatusEnum.Submitted);
                 recommendation.Created = DateTime.Now;
-                recommendation.CreatedBy = User.Identity.Name == null ? "Unknown User" : User.Identity.Name;
+                recommendation.CreatedBy = GetCurrentUserName();
 
                 _context.Add(recommendation);
                 await _context.SaveChangesAsync();
@@ -361,6 +362,16 @@ namespace Project_Flow_Manager.Controllers
             ViewData["ActionResult"] = "success";
 
             return RedirectToAction(nameof(Details), new { id = recommendationId });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentUserName()
+        {
+            Claim? claim = User.Claims.FirstOrDefault(x => x.Type.ToString() == "name");
+            return claim.Value;
         }
 
         /// <summary>
