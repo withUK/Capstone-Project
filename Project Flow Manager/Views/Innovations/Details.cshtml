@@ -77,7 +77,7 @@
 @if (Model.Status != "Approved")
 {
     <div>
-        <a class="btn btn-primary btn-arrow" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+        <a class="btn btn-primary btn-arrow" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> <a class="btn btn-download" asp-action="CreateDocument" asp-route-id="@Model?.Id">Download <i class="fa-solid fa-file-arrow-down"></i></a>
     </div>
 }
 

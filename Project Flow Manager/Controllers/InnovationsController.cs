@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
+using Syncfusion.DocIO.DLS;
 
 namespace Project_Flow_Manager.Controllers
 {
@@ -90,6 +91,7 @@ namespace Project_Flow_Manager.Controllers
             {
                 _context.Add(innovation);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(ProcessSteps), new { innovationId = innovation.Id });
             }
             ViewData["Title"] = "Add a new idea";
@@ -377,6 +379,27 @@ namespace Project_Flow_Manager.Controllers
             ViewData["ActionResult"] = "success";
 
             return RedirectToAction(nameof(ProcessSteps), new { innovationId = innovationId });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="innovation"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> CreateDocument(int id)
+        {
+            var innovation = await _context.Innovation
+                .Include(m => m.ProcessSteps)
+                .Include(m => m.Technologies)
+                .Include(m => m.Comments)
+                .Include(m => m.Tags)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            var document = innovation.GenerateWordDocument(); 
+            
+            MemoryStream stream = DocumentCreationHelper.SaveDocumentToStream(document);
+
+            return File(stream, "application/msword", ($"{innovation.Title}.docx"));
         }
 
         /// <summary>
