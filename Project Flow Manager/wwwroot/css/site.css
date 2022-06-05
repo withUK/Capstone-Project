@@ -32,6 +32,13 @@ body {
     font-size: 19px;
 }
 
+.btn-download {
+    box-shadow: 0 3px 0 #001b24;
+    border-color: #003f55;
+    background-color: #003f55;
+    color: white;
+}
+
 .btn-danger {
     box-shadow: 0 3px 0 #a0101e;
     border-color: #dc3545;
