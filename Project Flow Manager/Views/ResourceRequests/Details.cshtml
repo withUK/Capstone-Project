@@ -1,4 +1,5 @@
 ﻿@using ProjectFlowManagerModels
+@using Project_Flow_Manager_Models
 @model Project_Flow_Manager_Models.ResourceRequest
 
 <a asp-action="Index" asp-controller="ResourceRequests" class="link-back">Back</a>
@@ -9,7 +10,7 @@
 <div>
     <hr />
     <div class="row">
-        @await Html.PartialAsync("/Views/Shared/_Tags.cshtml", @Model.Tags == null? new List<Comment>() : Model.Tags)
+        @await Html.PartialAsync("/Views/Shared/_Tags.cshtml", @Model.Tags == null? new List<Tag>() : Model.Tags)
     </div><br />
     <dl class="row">
         <h3>Project Assessment Details</h3>
@@ -73,7 +74,7 @@
         }
     </dl>
 </div>
-@if (Model.Technologies.Count > 0 && Model.Teams.Count > 0)
+@if (Model.Technologies.Count > 0 && Model.Teams.Count > 0 &&Model.EnvironmentsCreated != true)
 {
     <a class="btn btn-primary" asp-action="ConfirmResourceRequest" asp-route-id="@Model.Id" asp-route-resourceRequestId="@Model.Id">Confirm</a>
 }

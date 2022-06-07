@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Project_Flow_Manager.Enums;
 using Project_Flow_Manager.Helpers;
 using Project_Flow_Manager_Models;
+using ProjectFlowManagerProject_Flow_Manager.Helpers;
 
 namespace Project_Flow_Manager.Controllers
 {
@@ -343,7 +344,36 @@ namespace Project_Flow_Manager.Controllers
             var resourceRequest = _context.ResourceRequest.Where(i => i.Id == id).FirstOrDefault();
             resourceRequest.Status = EnumHelper.GetDisplayName(StatusEnum.PassedToDevelopement);
 
+            CreateDevOps(id);
+
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> CreateDevOps(int? id)
+        {
+            if (id == null || _context.ResourceRequest == null)
+            {
+                return NotFound();
+            }
+
+            var resourceRequest = _context.ResourceRequest
+                .Where(m => m.Id == id)
+                .Include(m => m.ProjectAssessmentReport)
+                .ThenInclude(p => p.Innovation)
+                .FirstOrDefault();
+
+            if (resourceRequest == null)
+            {
+                return NotFound();
+            }
+
+            DevOpsHelper.CreateProject(resourceRequest.ProjectAssessmentReport.Title, resourceRequest.ProjectAssessmentReport.Innovation.Description);
+            resourceRequest.EnvironmentsCreated = true;
+
+            _context.ResourceRequest.Update(resourceRequest);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = id });
         }
 
         /// <summary>

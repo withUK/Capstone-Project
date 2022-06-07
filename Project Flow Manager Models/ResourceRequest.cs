@@ -7,6 +7,7 @@ namespace Project_Flow_Manager_Models
     {
         public ResourceRequest()
         {
+            EnvironmentsCreated = false;
             Teams = new List<TeamResource>();
             Technologies = new List<TechnologyResource>();
         }
@@ -26,6 +27,8 @@ namespace Project_Flow_Manager_Models
             }
             return hours;
         }
+
+        public bool EnvironmentsCreated { get; set; }
 
         public string Status { get; set; }
 
